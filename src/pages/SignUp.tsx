@@ -72,7 +72,7 @@ const SignUp = () => {
 
   const handleGoogleSignUp = async () => {
     try {
-      await signIn.withGoogle();
+      await signUp.withGoogle();
     } catch (error: any) {
       toast({
         title: "Google sign up failed",
@@ -84,7 +84,7 @@ const SignUp = () => {
 
   const handleLinkedInSignUp = async () => {
     try {
-      await signIn.withLinkedIn();
+      await signUp.withLinkedIn();
     } catch (error: any) {
       toast({
         title: "LinkedIn sign up failed",

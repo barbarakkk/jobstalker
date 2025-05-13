@@ -13,10 +13,6 @@ type AuthContextType = {
       error: any;
       data: any;
     }>;
-    withMagicLink: (email: string) => Promise<{
-      error: any;
-      data: any;
-    }>;
     withGoogle: () => Promise<void>;
     withLinkedIn: () => Promise<void>;
   };
@@ -25,6 +21,8 @@ type AuthContextType = {
       error: any;
       data: any;
     }>;
+    withGoogle: () => Promise<void>;
+    withLinkedIn: () => Promise<void>;
   };
   signOut: () => Promise<void>;
   resetPassword: (email: string) => Promise<{
@@ -83,15 +81,6 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       });
       return response;
     },
-    withMagicLink: async (email: string) => {
-      const response = await supabase.auth.signInWithOtp({
-        email,
-        options: {
-          emailRedirectTo: `${window.location.origin}/auth/callback`,
-        },
-      });
-      return response;
-    },
     withGoogle: async () => {
       await supabase.auth.signInWithOAuth({
         provider: "google",
@@ -121,6 +110,22 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       });
       return response;
     },
+    withGoogle: async () => {
+      await supabase.auth.signInWithOAuth({
+        provider: "google",
+        options: {
+          redirectTo: `${window.location.origin}/auth/callback`,
+        },
+      });
+    },
+    withLinkedIn: async () => {
+      await supabase.auth.signInWithOAuth({
+        provider: "linkedin_oidc",
+        options: {
+          redirectTo: `${window.location.origin}/auth/callback`,
+        },
+      });
+    }
   };
 
   const signOut = async () => {
