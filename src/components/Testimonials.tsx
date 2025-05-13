@@ -19,7 +19,7 @@ const testimonials = [
     name: 'Maya Rodriguez',
     position: 'Marketing Manager at Spotify',
     image: 'https://images.unsplash.com/photo-1580489944761-15a19d654956?ixlib=rb-1.2.1&auto=format&fit=crop&w=256&h=256&q=80',
-    quote: 'JobStalker's AI helped me discover opportunities that matched my skills but in industries I hadn't considered. This expanded my search and led to a job that pays 20% more than I expected.',
+    quote: 'JobStalker\'s AI helped me discover opportunities that matched my skills but in industries I hadn\'t considered. This expanded my search and led to a job that pays 20% more than I expected.',
   },
 ];
 
