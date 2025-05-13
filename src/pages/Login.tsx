@@ -1,37 +1,104 @@
 
-import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
+import React, { useState, useEffect } from 'react';
+import { Link, useNavigate, useSearchParams } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { ArrowLeft, Eye, EyeOff } from 'lucide-react';
+import { useAuth } from '@/context/AuthContext';
+import { useToast } from '@/hooks/use-toast';
 
 const Login = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
+  const [isEmailLogin, setIsEmailLogin] = useState(true);
+  const [isLoading, setIsLoading] = useState(false);
+  const [searchParams] = useSearchParams();
+  const { signIn, user } = useAuth();
+  const { toast } = useToast();
+  const navigate = useNavigate();
   
-  // These functions will be implemented once Supabase is connected
-  const handleEmailLogin = (e: React.FormEvent) => {
-    e.preventDefault();
-    console.log('Email login functionality will be implemented with Supabase');
-    console.log('Attempting to log in with:', email);
-  };
-
-  const handleGoogleLogin = () => {
-    console.log('Google login functionality will be implemented with Supabase');
-  };
-
-  const handleLinkedInLogin = () => {
-    console.log('LinkedIn login functionality will be implemented with Supabase');
-  };
-
-  const handleGithubLogin = () => {
-    console.log('Github login functionality will be implemented with Supabase');
-  };
+  useEffect(() => {
+    // If user is already logged in, redirect to dashboard
+    if (user) {
+      navigate('/dashboard');
+    }
+    
+    // Check for error parameter in URL
+    const error = searchParams.get('error');
+    if (error) {
+      toast({
+        title: "Authentication Error",
+        description: "There was an error during authentication. Please try again.",
+        variant: "destructive",
+      });
+    }
+  }, [user, navigate, searchParams, toast]);
 
   const togglePasswordVisibility = () => {
     setShowPassword(!showPassword);
+  };
+
+  const handleEmailLogin = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setIsLoading(true);
+    
+    try {
+      if (isEmailLogin) {
+        // Email/Password login
+        const { error } = await signIn.email(email, password);
+        if (error) {
+          throw error;
+        }
+      } else {
+        // Magic link login
+        const { error } = await signIn.withMagicLink(email);
+        if (error) {
+          throw error;
+        }
+        toast({
+          title: "Magic link sent!",
+          description: "Check your email for a login link.",
+        });
+      }
+    } catch (error: any) {
+      toast({
+        title: "Login failed",
+        description: error.message || "Please check your credentials and try again.",
+        variant: "destructive",
+      });
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const handleGoogleLogin = async () => {
+    try {
+      await signIn.withGoogle();
+    } catch (error: any) {
+      toast({
+        title: "Google login failed",
+        description: error.message || "An error occurred during Google login.",
+        variant: "destructive",
+      });
+    }
+  };
+
+  const handleLinkedInLogin = async () => {
+    try {
+      await signIn.withLinkedIn();
+    } catch (error: any) {
+      toast({
+        title: "LinkedIn login failed",
+        description: error.message || "An error occurred during LinkedIn login.",
+        variant: "destructive",
+      });
+    }
+  };
+
+  const toggleLoginMethod = () => {
+    setIsEmailLogin(!isEmailLogin);
   };
 
   return (
@@ -123,44 +190,66 @@ const Login = () => {
               />
             </div>
             
-            <div className="space-y-2">
-              <div className="flex items-center justify-between">
-                <Label htmlFor="password">Password</Label>
-                <Link to="/forgot-password" className="text-sm text-blue-600 hover:underline">
-                  Forgot password?
-                </Link>
+            {isEmailLogin && (
+              <div className="space-y-2">
+                <div className="flex items-center justify-between">
+                  <Label htmlFor="password">Password</Label>
+                  <Link to="/forgot-password" className="text-sm text-blue-600 hover:underline">
+                    Forgot password?
+                  </Link>
+                </div>
+                <div className="relative">
+                  <Input 
+                    id="password" 
+                    type={showPassword ? "text" : "password"} 
+                    placeholder="••••••••" 
+                    required
+                    value={password}
+                    onChange={(e) => setPassword(e.target.value)}
+                    className="border-gray-300 focus:border-blue-600 focus:ring-blue-600 pr-10"
+                  />
+                  <button 
+                    type="button"
+                    className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-500" 
+                    onClick={togglePasswordVisibility}
+                    tabIndex={-1}
+                  >
+                    {showPassword ? (
+                      <EyeOff className="h-5 w-5" />
+                    ) : (
+                      <Eye className="h-5 w-5" />
+                    )}
+                  </button>
+                </div>
               </div>
-              <div className="relative">
-                <Input 
-                  id="password" 
-                  type={showPassword ? "text" : "password"} 
-                  placeholder="••••••••" 
-                  required
-                  value={password}
-                  onChange={(e) => setPassword(e.target.value)}
-                  className="border-gray-300 focus:border-blue-600 focus:ring-blue-600 pr-10"
-                />
-                <button 
-                  type="button"
-                  className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-500" 
-                  onClick={togglePasswordVisibility}
-                  tabIndex={-1}
-                >
-                  {showPassword ? (
-                    <EyeOff className="h-5 w-5" />
-                  ) : (
-                    <Eye className="h-5 w-5" />
-                  )}
-                </button>
-              </div>
-            </div>
+            )}
             
             <Button 
               type="submit" 
               className="w-full bg-blue-600 hover:bg-blue-700"
+              disabled={isLoading}
             >
-              Log in
+              {isLoading ? (
+                <>
+                  <span className="animate-spin mr-2">⟳</span>
+                  {isEmailLogin ? "Logging in..." : "Sending link..."}
+                </>
+              ) : (
+                isEmailLogin ? "Log in" : "Send Magic Link"
+              )}
             </Button>
+
+            <div className="text-center">
+              <button
+                type="button"
+                onClick={toggleLoginMethod}
+                className="text-sm text-blue-600 hover:underline"
+              >
+                {isEmailLogin
+                  ? "Login with a magic link instead"
+                  : "Login with password instead"}
+              </button>
+            </div>
           </form>
           
           <div className="mt-6 text-center text-sm text-gray-600">
