@@ -7,7 +7,7 @@ const testimonials = [
     name: 'Sarah Johnson',
     position: 'UX Designer at Google',
     image: 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?ixlib=rb-1.2.1&auto=format&fit=crop&w=256&h=256&q=80',
-    quote: 'After 3 months of job searching with minimal responses, I started using JobStalker and landed 5 interviews in just 2 weeks. The AI resume optimization was a game-changer.',
+    quote: 'After 3 months of job searching with minimal responses, I started using JobStalker and landed 5 interviews in just 2 weeks.',
   },
   {
     name: 'David Chen',
@@ -38,7 +38,7 @@ const Testimonials = () => {
           {testimonials.map((testimonial, index) => (
             <div
               key={index}
-              className="bg-white p-8 rounded-xl border border-gray-100 shadow-sm card-hover"
+              className="bg-white p-8 rounded-xl border border-gray-100 shadow-sm"
             >
               <div className="flex items-center gap-1 mb-4">
                 {[...Array(5)].map((_, i) => (
@@ -61,23 +61,6 @@ const Testimonials = () => {
               </div>
             </div>
           ))}
-        </div>
-
-        <div className="mt-16 text-center">
-          <div className="bg-gray-50 p-6 md:p-10 rounded-xl inline-flex flex-col md:flex-row items-center gap-6 md:gap-10">
-            <div className="flex items-center gap-2">
-              <div className="bg-purple-600 text-white rounded-full w-8 h-8 flex items-center justify-center font-bold">3x</div>
-              <p className="font-semibold">More Interviews</p>
-            </div>
-            <div className="flex items-center gap-2">
-              <div className="bg-purple-600 text-white rounded-full w-8 h-8 flex items-center justify-center font-bold">75%</div>
-              <p className="font-semibold">Faster Hiring</p>
-            </div>
-            <div className="flex items-center gap-2">
-              <div className="bg-purple-600 text-white rounded-full w-8 h-8 flex items-center justify-center font-bold">92%</div>
-              <p className="font-semibold">Satisfaction Rate</p>
-            </div>
-          </div>
         </div>
       </div>
     </section>

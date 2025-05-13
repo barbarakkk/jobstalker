@@ -13,7 +13,7 @@ const benefits = [
 
 const Cta = () => {
   return (
-    <section id="pricing" className="py-20 px-6 bg-gradient-to-br from-purple-50 to-indigo-50">
+    <section id="pricing" className="py-20 px-6 bg-gray-50">
       <div className="container mx-auto max-w-5xl">
         <div className="bg-white rounded-2xl shadow-xl overflow-hidden">
           <div className="grid grid-cols-1 md:grid-cols-2">
@@ -33,20 +33,20 @@ const Cta = () => {
               </ul>
               
               <div className="flex flex-col sm:flex-row gap-4">
-                <Button size="lg" className="text-md px-8">
-                  Start Free Trial
+                <Button size="lg" className="text-md px-8 bg-blue-600 hover:bg-blue-700">
+                  Get Started Free
                 </Button>
-                <Button size="lg" variant="outline" className="text-md flex items-center gap-2">
+                <Button size="lg" variant="outline" className="text-md border-blue-600 text-blue-600 flex items-center gap-2">
                   Book a Demo
                   <ArrowRight className="h-4 w-4" />
                 </Button>
               </div>
             </div>
             
-            <div className="bg-purple-600 p-8 md:p-12 text-white flex items-center">
+            <div className="bg-blue-600 p-8 md:p-12 text-white flex items-center">
               <div>
                 <div className="bg-white/20 inline-block p-3 rounded-lg mb-6">
-                  <div className="bg-white text-purple-600 rounded font-bold text-xl px-4 py-2">
+                  <div className="bg-white text-blue-600 rounded font-bold text-xl px-4 py-2">
                     PRO
                   </div>
                 </div>
@@ -58,7 +58,7 @@ const Cta = () => {
                 <p className="text-white/80 mb-6">
                   Unlock advanced AI tools, unlimited job applications, and priority support.
                 </p>
-                <Button variant="secondary" size="lg" className="text-purple-600 hover:text-purple-700 bg-white w-full">
+                <Button variant="secondary" size="lg" className="text-blue-600 hover:text-blue-700 bg-white w-full">
                   Upgrade to Pro
                 </Button>
               </div>
