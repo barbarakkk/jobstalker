@@ -1,16 +1,21 @@
 
-import React from 'react';
+import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import { ArrowLeft, Twitter, Github, Mail } from 'lucide-react';
+import { ArrowLeft, Eye, EyeOff } from 'lucide-react';
 
 const Login = () => {
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [showPassword, setShowPassword] = useState(false);
+  
   // These functions will be implemented once Supabase is connected
   const handleEmailLogin = (e: React.FormEvent) => {
     e.preventDefault();
     console.log('Email login functionality will be implemented with Supabase');
+    console.log('Attempting to log in with:', email);
   };
 
   const handleGoogleLogin = () => {
@@ -23,6 +28,10 @@ const Login = () => {
 
   const handleGithubLogin = () => {
     console.log('Github login functionality will be implemented with Supabase');
+  };
+
+  const togglePasswordVisibility = () => {
+    setShowPassword(!showPassword);
   };
 
   return (
@@ -87,15 +96,6 @@ const Login = () => {
               </svg>
               Continue with LinkedIn
             </Button>
-            
-            <Button 
-              onClick={handleGithubLogin} 
-              variant="outline" 
-              className="w-full justify-center bg-white hover:bg-gray-50 text-gray-700 font-medium"
-            >
-              <Github className="h-5 w-5 mr-2" />
-              Continue with Github
-            </Button>
           </div>
           
           {/* Divider */}
@@ -117,6 +117,9 @@ const Login = () => {
                 type="email" 
                 placeholder="name@example.com" 
                 required 
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                className="border-gray-300 focus:border-blue-600 focus:ring-blue-600"
               />
             </div>
             
@@ -127,12 +130,29 @@ const Login = () => {
                   Forgot password?
                 </Link>
               </div>
-              <Input 
-                id="password" 
-                type="password" 
-                placeholder="••••••••" 
-                required 
-              />
+              <div className="relative">
+                <Input 
+                  id="password" 
+                  type={showPassword ? "text" : "password"} 
+                  placeholder="••••••••" 
+                  required
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                  className="border-gray-300 focus:border-blue-600 focus:ring-blue-600 pr-10"
+                />
+                <button 
+                  type="button"
+                  className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-500" 
+                  onClick={togglePasswordVisibility}
+                  tabIndex={-1}
+                >
+                  {showPassword ? (
+                    <EyeOff className="h-5 w-5" />
+                  ) : (
+                    <Eye className="h-5 w-5" />
+                  )}
+                </button>
+              </div>
             </div>
             
             <Button 
