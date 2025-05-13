@@ -1,7 +1,7 @@
 
 import React from 'react';
 import { Button } from '@/components/ui/button';
-import { ArrowRight, CheckCircle } from 'lucide-react';
+import { CheckCircle } from 'lucide-react';
 
 const benefits = [
   "Smart job matching with AI",
@@ -34,11 +34,7 @@ const Cta = () => {
               
               <div className="flex flex-col sm:flex-row gap-4">
                 <Button size="lg" className="text-md px-8 bg-blue-600 hover:bg-blue-700">
-                  Get Started Free
-                </Button>
-                <Button size="lg" variant="outline" className="text-md border-blue-600 text-blue-600 flex items-center gap-2">
-                  Book a Demo
-                  <ArrowRight className="h-4 w-4" />
+                  Sign Up
                 </Button>
               </div>
             </div>
@@ -52,7 +48,7 @@ const Cta = () => {
                 </div>
                 <h3 className="text-2xl font-bold mb-2">JobStalker Pro</h3>
                 <div className="mb-6">
-                  <span className="text-4xl font-bold">$19</span>
+                  <span className="text-4xl font-bold">$10</span>
                   <span className="text-xl">/month</span>
                 </div>
                 <p className="text-white/80 mb-6">

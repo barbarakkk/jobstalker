@@ -31,10 +31,10 @@ const Navbar = () => {
             
             <div className="flex items-center gap-3">
               <Button variant="outline" className="text-blue-600 border-blue-600">
-                Sign In
+                Sign Up
               </Button>
               <Button className="bg-blue-600 hover:bg-blue-700">
-                Get Started
+                Log In
               </Button>
             </div>
           </div>
@@ -59,10 +59,10 @@ const Navbar = () => {
             
             <div className="flex flex-col gap-3 pt-4 border-t border-gray-100">
               <Button variant="outline" className="flex justify-center items-center w-full text-blue-600 border-blue-600">
-                Sign In
+                Sign Up
               </Button>
               <Button className="flex justify-center items-center w-full bg-blue-600 hover:bg-blue-700">
-                Get Started
+                Log In
               </Button>
             </div>
           </div>
