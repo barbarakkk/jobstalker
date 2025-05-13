@@ -1,5 +1,6 @@
 
 import React from 'react';
+import { Link } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { CheckCircle } from 'lucide-react';
 
@@ -33,9 +34,11 @@ const Cta = () => {
               </ul>
               
               <div className="flex flex-col sm:flex-row gap-4">
-                <Button size="lg" className="text-md px-8 bg-blue-600 hover:bg-blue-700">
-                  Sign Up
-                </Button>
+                <Link to="/signup">
+                  <Button size="lg" className="text-md px-8 bg-blue-600 hover:bg-blue-700">
+                    Sign Up
+                  </Button>
+                </Link>
               </div>
             </div>
             

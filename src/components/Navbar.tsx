@@ -1,5 +1,6 @@
 
 import React, { useState } from 'react';
+import { Link } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { Menu, X } from 'lucide-react';
 
@@ -16,10 +17,10 @@ const Navbar = () => {
         <div className="flex justify-between items-center">
           {/* Logo */}
           <div className="flex items-center">
-            <a href="/" className="flex items-center gap-2">
+            <Link to="/" className="flex items-center gap-2">
               <div className="bg-blue-600 text-white rounded-md w-8 h-8 flex items-center justify-center text-lg font-bold">JS</div>
               <span className="text-xl font-bold text-gray-800">Jobstalker</span>
-            </a>
+            </Link>
           </div>
 
           {/* Desktop Navigation */}
@@ -30,12 +31,16 @@ const Navbar = () => {
             <a href="#" className="text-gray-700 hover:text-blue-700 transition-colors">Blog</a>
             
             <div className="flex items-center gap-3">
-              <Button variant="outline" className="text-blue-600 border-blue-600">
-                Sign Up
-              </Button>
-              <Button className="bg-blue-600 hover:bg-blue-700">
-                Log In
-              </Button>
+              <Link to="/signup">
+                <Button variant="outline" className="text-blue-600 border-blue-600">
+                  Sign Up
+                </Button>
+              </Link>
+              <Link to="/login">
+                <Button className="bg-blue-600 hover:bg-blue-700">
+                  Log In
+                </Button>
+              </Link>
             </div>
           </div>
 
@@ -58,12 +63,16 @@ const Navbar = () => {
             <a href="#" className="text-gray-700 hover:text-blue-700 py-2 transition-colors" onClick={toggleMenu}>Blog</a>
             
             <div className="flex flex-col gap-3 pt-4 border-t border-gray-100">
-              <Button variant="outline" className="flex justify-center items-center w-full text-blue-600 border-blue-600">
-                Sign Up
-              </Button>
-              <Button className="flex justify-center items-center w-full bg-blue-600 hover:bg-blue-700">
-                Log In
-              </Button>
+              <Link to="/signup" onClick={toggleMenu}>
+                <Button variant="outline" className="flex justify-center items-center w-full text-blue-600 border-blue-600">
+                  Sign Up
+                </Button>
+              </Link>
+              <Link to="/login" onClick={toggleMenu}>
+                <Button className="flex justify-center items-center w-full bg-blue-600 hover:bg-blue-700">
+                  Log In
+                </Button>
+              </Link>
             </div>
           </div>
         </div>
