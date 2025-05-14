@@ -18,12 +18,15 @@ const SocialAuth = ({ mode }: SocialAuthProps) => {
   const handleGoogleAuth = async () => {
     try {
       setIsGoogleLoading(true);
+      console.log(`Initiating Google ${mode} flow...`);
+      
       if (mode === 'signup') {
         await signUp.withGoogle();
       } else {
         await signIn.withGoogle();
       }
     } catch (error: any) {
+      console.error(`Google ${mode} error:`, error);
       toast({
         title: `Google ${mode} failed`,
         description: error.message || `An error occurred during Google ${mode}.`,
@@ -37,12 +40,15 @@ const SocialAuth = ({ mode }: SocialAuthProps) => {
   const handleLinkedInAuth = async () => {
     try {
       setIsLinkedInLoading(true);
+      console.log(`Initiating LinkedIn ${mode} flow...`);
+      
       if (mode === 'signup') {
         await signUp.withLinkedIn();
       } else {
         await signIn.withLinkedIn();
       }
     } catch (error: any) {
+      console.error(`LinkedIn ${mode} error:`, error);
       toast({
         title: `LinkedIn ${mode} failed`,
         description: error.message || `An error occurred during LinkedIn ${mode}.`,
@@ -60,6 +66,7 @@ const SocialAuth = ({ mode }: SocialAuthProps) => {
         variant="outline" 
         className="w-full justify-center bg-white hover:bg-gray-50 text-gray-700 font-medium"
         disabled={isGoogleLoading || isLinkedInLoading}
+        type="button"
       >
         {isGoogleLoading ? (
           <Loader2 className="h-4 w-4 mr-2 animate-spin" />
@@ -91,6 +98,7 @@ const SocialAuth = ({ mode }: SocialAuthProps) => {
         variant="outline" 
         className="w-full justify-center bg-white hover:bg-gray-50 text-gray-700 font-medium"
         disabled={isGoogleLoading || isLinkedInLoading}
+        type="button"
       >
         {isLinkedInLoading ? (
           <Loader2 className="h-4 w-4 mr-2 animate-spin" />

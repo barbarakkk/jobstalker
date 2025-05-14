@@ -70,6 +70,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
     // Then check for existing session
     supabase.auth.getSession().then(({ data: { session: currentSession } }) => {
+      console.log("Initial session check:", currentSession?.user?.id || "No session");
       setSession(currentSession);
       setUser(currentSession?.user ?? null);
       setIsLoading(false);
@@ -108,13 +109,22 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     },
     withGoogle: async () => {
       try {
-        await supabase.auth.signInWithOAuth({
+        console.log("Starting Google sign in...");
+        const { data, error } = await supabase.auth.signInWithOAuth({
           provider: "google",
           options: {
             redirectTo: `${window.location.origin}/auth/callback`,
           },
         });
+        
+        if (error) {
+          console.error("Google sign in error:", error);
+          throw error;
+        }
+        
+        console.log("Google sign in data:", data);
       } catch (error: any) {
+        console.error("Google sign in catch error:", error);
         toast({
           title: "Google sign in failed",
           description: error.message || "An error occurred during Google sign in.",
@@ -124,13 +134,22 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     },
     withLinkedIn: async () => {
       try {
-        await supabase.auth.signInWithOAuth({
+        console.log("Starting LinkedIn sign in...");
+        const { data, error } = await supabase.auth.signInWithOAuth({
           provider: "linkedin_oidc",
           options: {
             redirectTo: `${window.location.origin}/auth/callback`,
           },
         });
+        
+        if (error) {
+          console.error("LinkedIn sign in error:", error);
+          throw error;
+        }
+        
+        console.log("LinkedIn sign in data:", data);
       } catch (error: any) {
+        console.error("LinkedIn sign in catch error:", error);
         toast({
           title: "LinkedIn sign in failed",
           description: error.message || "An error occurred during LinkedIn sign in.",
@@ -176,7 +195,8 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     },
     withGoogle: async () => {
       try {
-        await supabase.auth.signInWithOAuth({
+        console.log("Starting Google sign up...");
+        const { data, error } = await supabase.auth.signInWithOAuth({
           provider: "google",
           options: {
             redirectTo: `${window.location.origin}/auth/callback`,
@@ -186,7 +206,15 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
             }
           },
         });
+        
+        if (error) {
+          console.error("Google sign up error:", error);
+          throw error;
+        }
+        
+        console.log("Google sign up data:", data);
       } catch (error: any) {
+        console.error("Google sign up catch error:", error);
         toast({
           title: "Google sign up failed",
           description: error.message || "An error occurred during Google sign up.",
@@ -196,13 +224,22 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     },
     withLinkedIn: async () => {
       try {
-        await supabase.auth.signInWithOAuth({
+        console.log("Starting LinkedIn sign up...");
+        const { data, error } = await supabase.auth.signInWithOAuth({
           provider: "linkedin_oidc",
           options: {
             redirectTo: `${window.location.origin}/auth/callback`,
           },
         });
+        
+        if (error) {
+          console.error("LinkedIn sign up error:", error);
+          throw error;
+        }
+        
+        console.log("LinkedIn sign up data:", data);
       } catch (error: any) {
+        console.error("LinkedIn sign up catch error:", error);
         toast({
           title: "LinkedIn sign up failed",
           description: error.message || "An error occurred during LinkedIn sign up.",
