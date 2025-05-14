@@ -1,7 +1,7 @@
 
 import React, { useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { useAuth } from '@/context/AuthContext';
+import { useAuth } from '@/context/auth';
 import AuthLayout from '@/components/layout/AuthLayout';
 import AuthHeader from '@/components/layout/AuthHeader';
 import SocialAuth from '@/components/auth/SocialAuth';

@@ -5,7 +5,7 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Eye, EyeOff } from 'lucide-react';
-import { useAuth } from '@/context/AuthContext';
+import { useAuth } from '@/context/auth';
 import { useToast } from '@/hooks/use-toast';
 import AuthLayout from '@/components/layout/AuthLayout';
 import AuthHeader from '@/components/layout/AuthHeader';
