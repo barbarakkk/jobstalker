@@ -7,6 +7,7 @@ import JobListItem from '@/components/jobs/JobListItem';
 import AddJobDialog from '@/components/jobs/AddJobDialog';
 import { JOB_STATUSES, type Job, type JobStatus } from '@/types/job';
 import { mockJobs } from '@/lib/mock-data';
+import DashboardNavbar from '@/components/DashboardNavbar';
 
 const Jobs = () => {
   const { user } = useAuth();
@@ -66,26 +67,13 @@ const Jobs = () => {
 
   return (
     <div className="min-h-screen bg-blue-50">
-      <header className="bg-blue-600 text-white shadow">
-        <div className="container mx-auto py-4 px-6 flex items-center justify-between">
-          <div className="flex items-center gap-2">
-            <div className="bg-white text-blue-600 rounded-md w-8 h-8 flex items-center justify-center text-lg font-bold">JS</div>
-            <span className="text-xl font-bold text-white">JobStalker</span>
-          </div>
-          <div>
-            <Button 
-              variant="ghost"
-              className="text-white hover:text-white hover:bg-blue-700"
-            >
-              Settings
-            </Button>
-          </div>
-        </div>
-      </header>
-
-      <main className="container mx-auto py-6 px-6">
+      <DashboardNavbar />
+      
+      <main className="container mx-auto py-6 px-6 pt-20">
+        <h1 className="text-2xl font-bold text-gray-900 mb-6">Job Tracker</h1>
+        
         {/* Status Columns Summary */}
-        <div className="flex justify-between mb-6 gap-4">
+        <div className="flex flex-wrap justify-between mb-6 gap-4">
           {JOB_STATUSES.filter(status => status !== 'rejected').map((status) => (
             <JobStatusColumn 
               key={status}
@@ -96,7 +84,7 @@ const Jobs = () => {
         </div>
 
         {/* Control Bar */}
-        <div className="bg-white p-4 rounded-lg shadow mb-4 flex justify-between items-center">
+        <div className="bg-white p-4 rounded-lg shadow mb-4 flex flex-col md:flex-row md:justify-between md:items-center gap-4">
           <div className="flex items-center gap-2">
             <input
               type="checkbox"
@@ -109,7 +97,7 @@ const Jobs = () => {
             </span>
           </div>
           
-          <div className="flex items-center gap-4">
+          <div className="flex flex-wrap items-center gap-4">
             <div className="flex items-center gap-2">
               <span className="text-sm text-gray-600">Group by:</span>
               <select
@@ -149,7 +137,7 @@ const Jobs = () => {
         </div>
 
         {/* Job List */}
-        <div className="bg-white rounded-lg shadow">
+        <div className="bg-white rounded-lg shadow overflow-x-auto">
           <div className="grid grid-cols-12 py-2 px-4 bg-gray-50 rounded-t-lg border-b text-sm font-medium text-gray-600">
             <div className="col-span-1"></div>
             <div className="col-span-3">Job Title / Company</div>
@@ -162,16 +150,22 @@ const Jobs = () => {
             <div className="col-span-1">Excitement</div>
           </div>
           
-          {jobs.map(job => (
-            <JobListItem 
-              key={job.id} 
-              job={job} 
-              isSelected={selectedJobIds.has(job.id)}
-              onToggleSelect={handleToggleSelect}
-              onUpdate={handleUpdateJob}
-              onDelete={handleDeleteJob}
-            />
-          ))}
+          {jobs.length > 0 ? (
+            jobs.map(job => (
+              <JobListItem 
+                key={job.id} 
+                job={job} 
+                isSelected={selectedJobIds.has(job.id)}
+                onToggleSelect={handleToggleSelect}
+                onUpdate={handleUpdateJob}
+                onDelete={handleDeleteJob}
+              />
+            ))
+          ) : (
+            <div className="py-8 text-center text-gray-500">
+              No jobs found. Add your first job application!
+            </div>
+          )}
         </div>
       </main>
 
