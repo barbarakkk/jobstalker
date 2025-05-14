@@ -15,6 +15,7 @@ import ForgotPassword from "./pages/ForgotPassword";
 import ResetPassword from "./pages/ResetPassword";
 import AuthCallback from "./pages/AuthCallback";
 import Dashboard from "./pages/Dashboard";
+import Jobs from "./pages/Jobs"; // Add Jobs page import
 
 const queryClient = new QueryClient();
 
@@ -54,6 +55,16 @@ const AuthenticatedApp = () => {
         element={
           <ProtectedRoute>
             <Dashboard />
+          </ProtectedRoute>
+        } 
+      />
+      
+      {/* Add Jobs protected route */}
+      <Route 
+        path="/jobs" 
+        element={
+          <ProtectedRoute>
+            <Jobs />
           </ProtectedRoute>
         } 
       />
