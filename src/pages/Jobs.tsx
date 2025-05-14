@@ -1,7 +1,7 @@
 
 import React, { useState } from 'react';
 import { Button } from '@/components/ui/button';
-import { useAuth } from '@/context/AuthContext';
+import { useAuth } from '@/context/auth';
 import JobStatusColumn from '@/components/jobs/JobStatusColumn';
 import JobListItem from '@/components/jobs/JobListItem';
 import AddJobDialog from '@/components/jobs/AddJobDialog';
