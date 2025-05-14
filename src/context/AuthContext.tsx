@@ -145,7 +145,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       try {
         console.log("Starting LinkedIn sign in...");
         const { data, error } = await supabase.auth.signInWithOAuth({
-          provider: "linkedin_oidc",
+          provider: "linkedin_oidc", // Updated from linkedin to linkedin_oidc
           options: {
             redirectTo: `${window.location.origin}/auth/callback`,
           },
@@ -235,7 +235,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       try {
         console.log("Starting LinkedIn sign up...");
         const { data, error } = await supabase.auth.signInWithOAuth({
-          provider: "linkedin_oidc",
+          provider: "linkedin_oidc", // Updated from linkedin to linkedin_oidc
           options: {
             redirectTo: `${window.location.origin}/auth/callback`,
           },

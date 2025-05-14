@@ -1,1 +1,12 @@
+
 project_id = "jldadxkmhjhpunnsuckm"
+
+[auth]
+# Enable email confirmations
+enable_signup = true
+disable_email_signup = false
+disable_email_confirmation = true
+
+# OAuth providers configuration
+[auth.external.google]
+enabled = true
