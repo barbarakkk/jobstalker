@@ -2,12 +2,15 @@
 import React, { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { useAuth } from '@/context/auth';
+import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import JobStatusColumn from '@/components/jobs/JobStatusColumn';
 import JobListItem from '@/components/jobs/JobListItem';
+import JobsKanbanView from '@/components/jobs/JobsKanbanView';
 import AddJobDialog from '@/components/jobs/AddJobDialog';
 import { JOB_STATUSES, type Job, type JobStatus } from '@/types/job';
 import { mockJobs } from '@/lib/mock-data';
 import JobsNavbar from '@/components/DashboardNavbar';
+import { Kanban } from 'lucide-react';
 
 const Jobs = () => {
   const { user } = useAuth();
@@ -15,6 +18,7 @@ const Jobs = () => {
   const [selectedJobIds, setSelectedJobIds] = useState<Set<string>>(new Set());
   const [isAddJobDialogOpen, setIsAddJobDialogOpen] = useState(false);
   const [groupBy, setGroupBy] = useState<string>('none');
+  const [viewMode, setViewMode] = useState<'list' | 'kanban'>('list');
 
   // Get counts by status
   const statusCounts = JOB_STATUSES.reduce<Record<JobStatus, number>>((acc, status) => {
@@ -86,30 +90,54 @@ const Jobs = () => {
         {/* Control Bar */}
         <div className="bg-white p-4 rounded-lg shadow mb-4 flex flex-col md:flex-row md:justify-between md:items-center gap-4">
           <div className="flex items-center gap-2">
-            <input
-              type="checkbox"
-              checked={selectedJobIds.size > 0 && selectedJobIds.size === jobs.length}
-              onChange={(e) => handleSelectAll(e.target.checked)}
-              className="rounded"
-            />
-            <span className="text-sm text-gray-600">
-              {selectedJobIds.size} selected
-            </span>
+            {viewMode === 'list' && (
+              <>
+                <input
+                  type="checkbox"
+                  checked={selectedJobIds.size > 0 && selectedJobIds.size === jobs.length}
+                  onChange={(e) => handleSelectAll(e.target.checked)}
+                  className="rounded"
+                />
+                <span className="text-sm text-gray-600">
+                  {selectedJobIds.size} selected
+                </span>
+              </>
+            )}
+            
+            {/* View Toggle */}
+            <div className="ml-4 md:ml-6">
+              <Tabs 
+                defaultValue="list" 
+                value={viewMode} 
+                onValueChange={(value) => setViewMode(value as 'list' | 'kanban')}
+                className="w-[240px]"
+              >
+                <TabsList className="grid w-full grid-cols-2">
+                  <TabsTrigger value="list">List View</TabsTrigger>
+                  <TabsTrigger value="kanban" className="flex items-center gap-2">
+                    <Kanban size={16} />
+                    <span>Kanban</span>
+                  </TabsTrigger>
+                </TabsList>
+              </Tabs>
+            </div>
           </div>
           
           <div className="flex flex-wrap items-center gap-4">
-            <div className="flex items-center gap-2">
-              <span className="text-sm text-gray-600">Group by:</span>
-              <select
-                value={groupBy}
-                onChange={(e) => setGroupBy(e.target.value)}
-                className="rounded border p-1 text-sm"
-              >
-                <option value="none">None</option>
-                <option value="company">Company</option>
-                <option value="location">Location</option>
-              </select>
-            </div>
+            {viewMode === 'list' && (
+              <div className="flex items-center gap-2">
+                <span className="text-sm text-gray-600">Group by:</span>
+                <select
+                  value={groupBy}
+                  onChange={(e) => setGroupBy(e.target.value)}
+                  className="rounded border p-1 text-sm"
+                >
+                  <option value="none">None</option>
+                  <option value="company">Company</option>
+                  <option value="location">Location</option>
+                </select>
+              </div>
+            )}
 
             <Button 
               variant="outline" 
@@ -136,37 +164,47 @@ const Jobs = () => {
           </div>
         </div>
 
-        {/* Job List */}
-        <div className="bg-white rounded-lg shadow overflow-x-auto">
-          <div className="grid grid-cols-12 py-2 px-4 bg-gray-50 rounded-t-lg border-b text-sm font-medium text-gray-600">
-            <div className="col-span-1"></div>
-            <div className="col-span-3">Job Title / Company</div>
-            <div className="col-span-1">Salary</div>
-            <div className="col-span-2">Location</div>
-            <div className="col-span-1">Status</div>
-            <div className="col-span-1">Date Saved</div>
-            <div className="col-span-1">Deadline</div>
-            <div className="col-span-1">Date Applied</div>
-            <div className="col-span-1">Excitement</div>
-          </div>
-          
-          {jobs.length > 0 ? (
-            jobs.map(job => (
-              <JobListItem 
-                key={job.id} 
-                job={job} 
-                isSelected={selectedJobIds.has(job.id)}
-                onToggleSelect={handleToggleSelect}
-                onUpdate={handleUpdateJob}
-                onDelete={handleDeleteJob}
-              />
-            ))
-          ) : (
-            <div className="py-8 text-center text-gray-500">
-              No jobs found. Add your first job application!
+        {/* Job Content - Conditional Rendering based on view mode */}
+        {viewMode === 'list' ? (
+          /* List View */
+          <div className="bg-white rounded-lg shadow overflow-x-auto">
+            <div className="grid grid-cols-12 py-2 px-4 bg-gray-50 rounded-t-lg border-b text-sm font-medium text-gray-600">
+              <div className="col-span-1"></div>
+              <div className="col-span-3">Job Title / Company</div>
+              <div className="col-span-1">Salary</div>
+              <div className="col-span-2">Location</div>
+              <div className="col-span-1">Status</div>
+              <div className="col-span-1">Date Saved</div>
+              <div className="col-span-1">Deadline</div>
+              <div className="col-span-1">Date Applied</div>
+              <div className="col-span-1">Excitement</div>
             </div>
-          )}
-        </div>
+            
+            {jobs.length > 0 ? (
+              jobs.map(job => (
+                <JobListItem 
+                  key={job.id} 
+                  job={job} 
+                  isSelected={selectedJobIds.has(job.id)}
+                  onToggleSelect={handleToggleSelect}
+                  onUpdate={handleUpdateJob}
+                  onDelete={handleDeleteJob}
+                />
+              ))
+            ) : (
+              <div className="py-8 text-center text-gray-500">
+                No jobs found. Add your first job application!
+              </div>
+            )}
+          </div>
+        ) : (
+          /* Kanban View */
+          <JobsKanbanView 
+            jobs={jobs}
+            onUpdateJob={handleUpdateJob}
+            onDeleteJob={handleDeleteJob}
+          />
+        )}
       </main>
 
       <AddJobDialog 
