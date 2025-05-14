@@ -28,9 +28,9 @@ const AuthCallback = () => {
             description: "You have been signed in successfully.",
           });
           
-          // Redirect to dashboard after short delay
+          // Redirect to jobs page after short delay
           setTimeout(() => {
-            navigate('/dashboard', { replace: true });
+            navigate('/jobs', { replace: true });
           }, 300);
         } else {
           setError("No session found. Please try signing in again.");

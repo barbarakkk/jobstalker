@@ -5,7 +5,7 @@ import { Button } from '@/components/ui/button';
 import { useAuth } from '@/context/auth';
 import { Menu, X, LogOut, User, Briefcase } from 'lucide-react';
 
-const DashboardNavbar = () => {
+const JobsNavbar = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const { user, signOut } = useAuth();
   const location = useLocation();
@@ -28,7 +28,7 @@ const DashboardNavbar = () => {
         <div className="flex justify-between items-center">
           {/* Logo */}
           <div className="flex items-center">
-            <Link to="/dashboard" className="flex items-center gap-2">
+            <Link to="/jobs" className="flex items-center gap-2">
               <div className="bg-blue-600 text-white rounded-md w-8 h-8 flex items-center justify-center text-lg font-bold">JS</div>
               <span className="text-xl font-bold text-gray-800">JobStalker</span>
             </Link>
@@ -37,14 +37,8 @@ const DashboardNavbar = () => {
           {/* Desktop Navigation */}
           <div className="hidden md:flex items-center gap-8">
             <Link 
-              to="/dashboard" 
-              className={`${location.pathname === '/dashboard' ? 'text-blue-700' : 'text-gray-700 hover:text-blue-700'} transition-colors`}
-            >
-              Dashboard
-            </Link>
-            <Link 
               to="/jobs" 
-              className={`${location.pathname === '/jobs' ? 'text-blue-700' : 'text-gray-700 hover:text-blue-700'} transition-colors`}
+              className="text-blue-700 transition-colors"
             >
               Job Tracker
             </Link>
@@ -77,15 +71,8 @@ const DashboardNavbar = () => {
         <div className="md:hidden absolute top-[72px] left-0 right-0 bg-white border-b border-gray-200 py-4 px-6 z-50">
           <div className="flex flex-col space-y-4">
             <Link 
-              to="/dashboard" 
-              className={`${location.pathname === '/dashboard' ? 'text-blue-700' : 'text-gray-700'} py-2 transition-colors`} 
-              onClick={toggleMenu}
-            >
-              Dashboard
-            </Link>
-            <Link 
               to="/jobs" 
-              className={`${location.pathname === '/jobs' ? 'text-blue-700' : 'text-gray-700'} py-2 transition-colors`} 
+              className="text-blue-700 py-2 transition-colors" 
               onClick={toggleMenu}
             >
               Job Tracker
@@ -117,4 +104,4 @@ const DashboardNavbar = () => {
   );
 };
 
-export default DashboardNavbar;
+export default JobsNavbar;

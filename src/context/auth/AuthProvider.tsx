@@ -42,7 +42,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
               title: "Signed in successfully",
               description: "Welcome back!",
             });
-            navigate("/dashboard");
+            navigate("/jobs");
           }, 0);
         } else if (event === "SIGNED_OUT") {
           // Defer navigation with setTimeout to avoid potential deadlocks

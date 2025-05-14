@@ -7,7 +7,7 @@ import JobListItem from '@/components/jobs/JobListItem';
 import AddJobDialog from '@/components/jobs/AddJobDialog';
 import { JOB_STATUSES, type Job, type JobStatus } from '@/types/job';
 import { mockJobs } from '@/lib/mock-data';
-import DashboardNavbar from '@/components/DashboardNavbar';
+import JobsNavbar from '@/components/DashboardNavbar';
 
 const Jobs = () => {
   const { user } = useAuth();
@@ -67,7 +67,7 @@ const Jobs = () => {
 
   return (
     <div className="min-h-screen bg-blue-50">
-      <DashboardNavbar />
+      <JobsNavbar />
       
       <main className="container mx-auto py-6 px-6 pt-20">
         <h1 className="text-2xl font-bold text-gray-900 mb-6">Job Tracker</h1>
