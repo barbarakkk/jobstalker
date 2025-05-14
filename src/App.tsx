@@ -15,11 +15,18 @@ import ForgotPassword from "./pages/ForgotPassword";
 import ResetPassword from "./pages/ResetPassword";
 import AuthCallback from "./pages/AuthCallback";
 import Dashboard from "./pages/Dashboard";
-import Jobs from "./pages/Jobs"; // Add Jobs page import
+import Jobs from "./pages/Jobs";
 
-const queryClient = new QueryClient();
+const queryClient = new QueryClient({
+  defaultOptions: {
+    queries: {
+      retry: 1,
+      refetchOnWindowFocus: false,
+    },
+  },
+});
 
-// Route guard for protected routes
+// Route guard for protected routes with improved loading state
 const ProtectedRoute = ({ children }: { children: React.ReactNode }) => {
   const { user, isLoading } = useAuth();
   
@@ -32,9 +39,11 @@ const ProtectedRoute = ({ children }: { children: React.ReactNode }) => {
   }
   
   if (!user) {
+    console.log("No user found, redirecting to login");
     return <Navigate to="/login" replace />;
   }
   
+  console.log("User authenticated, rendering protected content");
   return <>{children}</>;
 };
 
@@ -78,11 +87,11 @@ const AuthenticatedApp = () => {
 const App = () => (
   <QueryClientProvider client={queryClient}>
     <TooltipProvider>
-      <Toaster />
-      <Sonner />
       <BrowserRouter>
         <AuthProvider>
           <AuthenticatedApp />
+          <Toaster />
+          <Sonner />
         </AuthProvider>
       </BrowserRouter>
     </TooltipProvider>
