@@ -5,18 +5,12 @@ import { Card, CardContent } from '@/components/ui/card';
 import { cn } from '@/lib/utils';
 import { StarIcon } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
+import { useJobs } from '@/context/jobs/JobsContext';
 
-interface JobsKanbanViewProps {
-  jobs: Job[];
-  onUpdateJob: (job: Job) => void;
-  onDeleteJob: (id: string) => void;
-}
+const JobsKanbanView: React.FC = () => {
+  const { jobs, updateJob, deleteJob } = useJobs();
+  const { toast } = useToast();
 
-const JobsKanbanView: React.FC<JobsKanbanViewProps> = ({ 
-  jobs,
-  onUpdateJob,
-  onDeleteJob
-}) => {
   const columns = [
     { id: 'bookmarked', title: 'BOOKMARKED', color: 'border-blue-400 bg-blue-50' },
     { id: 'applying', title: 'APPLYING', color: 'border-orange-400 bg-orange-50' },
@@ -25,8 +19,6 @@ const JobsKanbanView: React.FC<JobsKanbanViewProps> = ({
     { id: 'accepted', title: 'ACCEPTED', color: 'border-green-400 bg-green-50' },
     { id: 'rejected', title: 'REJECTED', color: 'border-red-400 bg-red-50' }
   ];
-  
-  const { toast } = useToast();
 
   // Render excitement stars
   const renderExcitement = (excitement?: number) => {
@@ -62,7 +54,7 @@ const JobsKanbanView: React.FC<JobsKanbanViewProps> = ({
         status: status as any
       };
       
-      onUpdateJob(updatedJob);
+      updateJob(updatedJob);
       
       toast({
         title: "Job status updated",
@@ -118,13 +110,13 @@ const JobsKanbanView: React.FC<JobsKanbanViewProps> = ({
                       
                       <div className="flex gap-2">
                         <button 
-                          onClick={() => onUpdateJob({ ...job })}
+                          onClick={() => updateJob({ ...job })}
                           className="text-blue-600 hover:text-blue-800"
                         >
                           Edit
                         </button>
                         <button 
-                          onClick={() => onDeleteJob(job.id)}
+                          onClick={() => deleteJob(job.id)}
                           className="text-red-600 hover:text-red-800"
                         >
                           Delete
