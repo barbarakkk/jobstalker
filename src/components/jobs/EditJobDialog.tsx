@@ -6,6 +6,7 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { JOB_STATUSES, type Job, type JobStatus } from '@/types/job';
 import { useForm } from 'react-hook-form';
+import { Textarea } from '@/components/ui/textarea';
 
 interface EditJobDialogProps {
   job: Job;
@@ -186,10 +187,10 @@ const EditJobDialog: React.FC<EditJobDialogProps> = ({
           
           <div className="space-y-2">
             <Label htmlFor="notes">Notes</Label>
-            <textarea
+            <Textarea
               id="notes"
-              className="flex min-h-[80px] w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
               {...register('notes')}
+              className="min-h-[80px]"
             />
           </div>
           

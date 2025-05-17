@@ -4,6 +4,7 @@ import { Job } from '@/types/job';
 import { Card, CardContent } from '@/components/ui/card';
 import { cn } from '@/lib/utils';
 import { StarIcon } from 'lucide-react';
+import { useToast } from '@/hooks/use-toast';
 
 interface JobsKanbanViewProps {
   jobs: Job[];
@@ -24,6 +25,8 @@ const JobsKanbanView: React.FC<JobsKanbanViewProps> = ({
     { id: 'accepted', title: 'ACCEPTED', color: 'border-green-400 bg-green-50' },
     { id: 'rejected', title: 'REJECTED', color: 'border-red-400 bg-red-50' }
   ];
+  
+  const { toast } = useToast();
 
   // Render excitement stars
   const renderExcitement = (excitement?: number) => {
@@ -54,9 +57,16 @@ const JobsKanbanView: React.FC<JobsKanbanViewProps> = ({
     const job = jobs.find(j => j.id === jobId);
     
     if (job && job.status !== status) {
-      onUpdateJob({
+      const updatedJob = {
         ...job,
         status: status as any
+      };
+      
+      onUpdateJob(updatedJob);
+      
+      toast({
+        title: "Job status updated",
+        description: `${job.title} moved to ${status.charAt(0).toUpperCase() + status.slice(1)}`,
       });
     }
   };

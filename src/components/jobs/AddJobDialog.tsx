@@ -6,6 +6,7 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { JOB_STATUSES, type Job, type JobStatus } from '@/types/job';
 import { useForm } from 'react-hook-form';
+import { Textarea } from '@/components/ui/textarea';
 
 interface AddJobDialogProps {
   isOpen: boolean;
@@ -22,6 +23,7 @@ interface JobFormData {
   deadline?: string;
   jobUrl?: string;
   notes?: string;
+  excitement?: number;
 }
 
 const AddJobDialog: React.FC<AddJobDialogProps> = ({ isOpen, onClose, onAddJob }) => {
@@ -29,7 +31,7 @@ const AddJobDialog: React.FC<AddJobDialogProps> = ({ isOpen, onClose, onAddJob }
 
   const onSubmit = (data: JobFormData) => {
     const newJob: Job = {
-      id: crypto.randomUUID(),
+      id: crypto.randomUUID(), // This will be replaced by the database-generated ID
       title: data.title,
       company: data.company,
       location: data.location,
@@ -39,12 +41,18 @@ const AddJobDialog: React.FC<AddJobDialogProps> = ({ isOpen, onClose, onAddJob }
       deadline: data.deadline,
       jobUrl: data.jobUrl,
       notes: data.notes,
-      excitement: 0
+      excitement: data.excitement || 0
     };
     
     onAddJob(newJob);
     reset();
   };
+
+  React.useEffect(() => {
+    if (!isOpen) {
+      reset();
+    }
+  }, [isOpen, reset]);
 
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
@@ -134,14 +142,32 @@ const AddJobDialog: React.FC<AddJobDialogProps> = ({ isOpen, onClose, onAddJob }
             />
           </div>
           
-          <div className="space-y-2">
-            <Label htmlFor="notes">Notes</Label>
-            <textarea
-              id="notes"
-              className="flex min-h-[80px] w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
-              {...register('notes')}
-              placeholder="Add any notes about this job..."
-            />
+          <div className="grid grid-cols-2 gap-4">
+            <div className="space-y-2">
+              <Label htmlFor="notes">Notes</Label>
+              <Textarea
+                id="notes"
+                {...register('notes')}
+                placeholder="Add any notes about this job..."
+                className="min-h-[80px]"
+              />
+            </div>
+            
+            <div className="space-y-2">
+              <Label htmlFor="excitement">Excitement Level</Label>
+              <select
+                id="excitement"
+                className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
+                {...register('excitement', { valueAsNumber: true })}
+              >
+                <option value="">Select rating</option>
+                <option value="1">1 star</option>
+                <option value="2">2 stars</option>
+                <option value="3">3 stars</option>
+                <option value="4">4 stars</option>
+                <option value="5">5 stars</option>
+              </select>
+            </div>
           </div>
           
           <DialogFooter>
