@@ -2,13 +2,16 @@
 import React from 'react';
 import { Job } from '@/types/job';
 import { Card, CardContent } from '@/components/ui/card';
-import { cn } from '@/lib/utils';
 import { StarIcon } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
-import { useJobs } from '@/context/jobs/JobsContext';
 
-const JobsKanbanView: React.FC = () => {
-  const { jobs, updateJob, deleteJob } = useJobs();
+interface JobsKanbanViewProps {
+  jobs: Job[];
+  onUpdateJob: (updatedJob: Job) => Promise<void>;
+  onDeleteJob: (jobId: string) => Promise<void>;
+}
+
+const JobsKanbanView: React.FC<JobsKanbanViewProps> = ({ jobs, onUpdateJob, onDeleteJob }) => {
   const { toast } = useToast();
 
   const columns = [
@@ -54,7 +57,7 @@ const JobsKanbanView: React.FC = () => {
         status: status as any
       };
       
-      updateJob(updatedJob);
+      onUpdateJob(updatedJob);
       
       toast({
         title: "Job status updated",
@@ -110,13 +113,13 @@ const JobsKanbanView: React.FC = () => {
                       
                       <div className="flex gap-2">
                         <button 
-                          onClick={() => updateJob({ ...job })}
+                          onClick={() => onUpdateJob({ ...job })}
                           className="text-blue-600 hover:text-blue-800"
                         >
                           Edit
                         </button>
                         <button 
-                          onClick={() => deleteJob(job.id)}
+                          onClick={() => onDeleteJob(job.id)}
                           className="text-red-600 hover:text-red-800"
                         >
                           Delete
