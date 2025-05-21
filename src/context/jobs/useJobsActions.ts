@@ -3,6 +3,7 @@ import { useState } from 'react';
 import { supabase } from '@/integrations/supabase/client';
 import { useToast } from '@/hooks/use-toast';
 import { Job, JobStatus } from '@/types/job';
+import { useAuth } from '@/context/auth';
 
 export const useJobsActions = (
   jobs: Job[],
@@ -10,9 +11,19 @@ export const useJobsActions = (
   setSelectedJobIds: React.Dispatch<React.SetStateAction<Set<string>>>
 ) => {
   const { toast } = useToast();
+  const { user } = useAuth();
 
   const addJob = async (job: Job) => {
     try {
+      if (!user) {
+        toast({
+          title: 'Authentication required',
+          description: 'You must be logged in to add jobs',
+          variant: 'destructive'
+        });
+        return;
+      }
+
       // Convert date strings to ISO format for database
       const dateAppliedIso = job.dateApplied ? new Date(job.dateApplied).toISOString() : null;
       const deadlineIso = job.deadline ? new Date(job.deadline).toISOString() : null;
@@ -32,6 +43,7 @@ export const useJobsActions = (
           deadline: deadlineIso,
           excitement: job.excitement || 0,
           notes: job.notes || null,
+          user_id: user.id // Add the user's ID from the auth context
         })
         .select();
 
@@ -78,6 +90,15 @@ export const useJobsActions = (
 
   const updateJob = async (updatedJob: Job) => {
     try {
+      if (!user) {
+        toast({
+          title: 'Authentication required',
+          description: 'You must be logged in to update jobs',
+          variant: 'destructive'
+        });
+        return;
+      }
+
       // Convert date strings to ISO format for database
       const dateAppliedIso = updatedJob.dateApplied ? new Date(updatedJob.dateApplied).toISOString() : null;
       const deadlineIso = updatedJob.deadline ? new Date(updatedJob.deadline).toISOString() : null;
@@ -129,6 +150,15 @@ export const useJobsActions = (
 
   const deleteJob = async (jobId: string) => {
     try {
+      if (!user) {
+        toast({
+          title: 'Authentication required', 
+          description: 'You must be logged in to delete jobs',
+          variant: 'destructive'
+        });
+        return;
+      }
+
       // Delete job from Supabase
       const { error } = await supabase
         .from('jobs')

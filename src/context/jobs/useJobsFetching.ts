@@ -19,6 +19,7 @@ export const useJobsFetching = (userId: string | undefined) => {
         const { data, error } = await supabase
           .from('jobs')
           .select('*')
+          .eq('user_id', userId) // Filter jobs by user ID
           .order('created_at', { ascending: false });
 
         if (error) {
