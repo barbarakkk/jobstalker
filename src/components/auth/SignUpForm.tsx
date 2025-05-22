@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -44,9 +43,9 @@ const SignUpForm = () => {
         throw response.error;
       }
       
-      // Check if email confirmation is required by checking if we have a user but no session
-      // This is a more type-safe way to check for email confirmation status
-      if (response.data.user && !response.data.session) {
+      // Check if email confirmation is required
+      // This is a type-safe way to check for email confirmation status
+      if (response.data.user && !("session" in response.data) || response.data.session === null) {
         toast({
           title: "Check your email",
           description: "We've sent you a confirmation link to complete your registration.",
