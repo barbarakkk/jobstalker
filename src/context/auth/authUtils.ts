@@ -187,35 +187,50 @@ export const signOutUser = async () => {
 
 export const deleteUserAccount = async () => {
   try {
-    // Instead of trying to delete the user directly (which requires admin privileges),
-    // we'll mark the profile for deletion using existing fields
-    const { error } = await supabase
-      .from('profiles')
-      .update({ 
-        updated_at: new Date().toISOString(),
-        // Use an existing field to mark for deletion
-        full_name: "DELETION_REQUESTED_" + new Date().toISOString()
-      })
-      .eq('id', (await supabase.auth.getUser()).data.user?.id || "");
+    // Get the current user
+    const { data: { user } } = await supabase.auth.getUser();
     
-    if (error) {
-      throw error;
+    if (!user) {
+      throw new Error("No authenticated user found");
     }
     
-    // Sign out the user after marking their account for deletion
+    // First, delete the user data from profiles table
+    const { error: profileError } = await supabase
+      .from('profiles')
+      .delete()
+      .eq('id', user.id);
+      
+    if (profileError) {
+      throw profileError;
+    }
+    
+    // Delete the user's auth account
+    const { error } = await supabase.auth.admin.deleteUser(user.id);
+    
+    if (error) {
+      // If admin deletion fails, we'll use the client-side delete method
+      // This requires user re-authentication in some cases, but will work for most scenarios
+      const { error: clientDeleteError } = await supabase.auth.deleteUser();
+      
+      if (clientDeleteError) {
+        throw clientDeleteError;
+      }
+    }
+    
+    // Sign out the user after successful deletion
     await signOutUser();
     
     toast({
-      title: "Account deletion requested",
-      description: "Your account deletion request has been submitted. Your account will be processed for deletion soon.",
+      title: "Account deleted",
+      description: "Your account has been successfully deleted.",
     });
     
     return { error: null };
   } catch (error: any) {
-    console.error("Error requesting account deletion:", error);
+    console.error("Error deleting account:", error);
     toast({
-      title: "Error requesting account deletion",
-      description: error.message || "An error occurred while requesting your account deletion.",
+      title: "Error deleting account",
+      description: error.message || "An error occurred while deleting your account.",
       variant: "destructive",
     });
     return { error };

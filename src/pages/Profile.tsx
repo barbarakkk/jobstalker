@@ -119,11 +119,11 @@ const ProfilePage = () => {
       
       if (error) throw error;
       
-      // Navigate to home page after successful account deletion request
+      // Navigate to home page after successful account deletion
       navigate('/');
     } catch (error: any) {
       toast({
-        title: "Error requesting account deletion",
+        title: "Error deleting account",
         description: error.message || "Something went wrong. Please try again.",
         variant: "destructive",
       });
@@ -275,27 +275,27 @@ const ProfilePage = () => {
           <h2 className="text-xl font-bold text-green-800 mb-6">Delete Account</h2>
           
           <p className="text-gray-700 mb-6">
-            To cancel your JobStalker account and delete all your career data just click the button below.
+            To permanently delete your JobStalker account and remove all your career data just click the button below.
           </p>
           
           <AlertDialog>
             <AlertDialogTrigger asChild>
               <Button variant="outline" className="text-red-600 border-red-600 hover:bg-red-50">
-                Request Account Deletion
+                Delete Account
               </Button>
             </AlertDialogTrigger>
             <AlertDialogContent>
               <AlertDialogHeader>
                 <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
                 <AlertDialogDescription>
-                  This action cannot be undone. This will submit your account for deletion
-                  and remove your access to the platform.
+                  This action cannot be undone. This will permanently delete your account
+                  and remove your data from our servers.
                 </AlertDialogDescription>
               </AlertDialogHeader>
               <AlertDialogFooter>
                 <AlertDialogCancel>Cancel</AlertDialogCancel>
                 <AlertDialogAction onClick={handleDeleteAccount} className="bg-red-600 hover:bg-red-700">
-                  Request Account Deletion
+                  Delete Account
                 </AlertDialogAction>
               </AlertDialogFooter>
             </AlertDialogContent>
