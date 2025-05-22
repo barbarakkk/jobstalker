@@ -14,6 +14,7 @@ import ForgotPassword from "./pages/ForgotPassword";
 import ResetPassword from "./pages/ResetPassword";
 import AuthCallback from "./pages/AuthCallback";
 import Jobs from "./pages/Jobs";
+import JobNotes from "./pages/JobNotes";
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -65,6 +66,16 @@ const AuthenticatedApp = () => {
         element={
           <ProtectedRoute>
             <Jobs />
+          </ProtectedRoute>
+        } 
+      />
+      
+      {/* Job Notes Page */}
+      <Route 
+        path="/jobs/:jobId/notes" 
+        element={
+          <ProtectedRoute>
+            <JobNotes />
           </ProtectedRoute>
         } 
       />

@@ -1,6 +1,7 @@
 
 import React, { useState } from 'react';
-import { StarIcon, FileText } from 'lucide-react';
+import { useNavigate } from 'react-router-dom';
+import { StarIcon, FileText, Edit } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from '@/components/ui/dropdown-menu';
 import { type Job } from '@/types/job';
@@ -22,6 +23,7 @@ const JobListItem: React.FC<JobListItemProps> = ({
   onUpdate,
   onDelete
 }) => {
+  const navigate = useNavigate();
   const [isEditDialogOpen, setIsEditDialogOpen] = useState(false);
   const [isNotesDialogOpen, setIsNotesDialogOpen] = useState(false);
 
@@ -40,6 +42,10 @@ const JobListItem: React.FC<JobListItemProps> = ({
         ))}
       </div>
     );
+  };
+
+  const handleNavigateToNotes = () => {
+    navigate(`/jobs/${job.id}/notes`);
   };
 
   return (
@@ -76,7 +82,7 @@ const JobListItem: React.FC<JobListItemProps> = ({
               <DropdownMenuItem onClick={() => setIsEditDialogOpen(true)}>
                 Edit
               </DropdownMenuItem>
-              <DropdownMenuItem onClick={() => setIsNotesDialogOpen(true)}>
+              <DropdownMenuItem onClick={handleNavigateToNotes}>
                 Notes
               </DropdownMenuItem>
               <DropdownMenuItem onClick={() => onDelete(job.id)}>
@@ -135,16 +141,16 @@ const JobListItem: React.FC<JobListItemProps> = ({
           {renderExcitement()}
         </div>
 
-        {/* Notes button */}
+        {/* Notes button/link column */}
         <div className="col-span-1">
           <Button
             variant="ghost"
             size="sm"
-            className="p-1"
-            onClick={() => setIsNotesDialogOpen(true)}
+            className="p-1 flex items-center gap-1 text-blue-600 hover:text-blue-800"
+            onClick={handleNavigateToNotes}
           >
-            <FileText size={18} className="text-blue-600" />
-            <span className="sr-only">Notes</span>
+            <Edit size={16} />
+            <span className="sr-only">View Notes</span>
           </Button>
         </div>
       </div>
@@ -154,14 +160,6 @@ const JobListItem: React.FC<JobListItemProps> = ({
         isOpen={isEditDialogOpen} 
         onClose={() => setIsEditDialogOpen(false)}
         onUpdateJob={onUpdate}
-      />
-
-      <JobNotesDialog
-        job={job}
-        isOpen={isNotesDialogOpen}
-        onClose={() => setIsNotesDialogOpen(false)}
-        onUpdateJob={onUpdate}
-        onDeleteJob={onDelete}
       />
     </>
   );
