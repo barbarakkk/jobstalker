@@ -45,8 +45,8 @@ const SignUpForm = () => {
       }
       
       // Check if email confirmation is required
-      // Use type guard to check if user exists and if session exists in the response
-      if (response.data?.user && !('session' in response.data) || response.data?.session === null) {
+      // A more type-safe approach to check for user existence and session absence
+      if (response.data?.user && !('session' in response.data)) {
         toast({
           title: "Check your email",
           description: "We've sent you a confirmation link to complete your registration.",
