@@ -187,13 +187,13 @@ export const signOutUser = async () => {
 
 export const deleteUserAccount = async () => {
   try {
-    // Instead of using admin.deleteUser, we'll mark the user profile with a timestamp
-    // to indicate they want their account deleted
+    // Instead of trying to delete the user directly (which requires admin privileges),
+    // we'll mark the profile for deletion using existing fields
     const { error } = await supabase
       .from('profiles')
       .update({ 
         updated_at: new Date().toISOString(),
-        // Store deletion request info in a note in an existing field
+        // Use an existing field to mark for deletion
         full_name: "DELETION_REQUESTED_" + new Date().toISOString()
       })
       .eq('id', (await supabase.auth.getUser()).data.user?.id || "");

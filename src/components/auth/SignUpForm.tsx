@@ -45,8 +45,8 @@ const SignUpForm = () => {
       }
       
       // Check if email confirmation is required by checking if we have a user but no active session
-      // Use optional chaining and 'in' operator to be type-safe
-      if (response.data?.user && 'session' in response.data && response.data.session === null) {
+      // Fix the TypeScript error by using a more reliable check
+      if (response.data?.user && !response.data.session) {
         toast({
           title: "Check your email",
           description: "We've sent you a confirmation link to complete your registration.",

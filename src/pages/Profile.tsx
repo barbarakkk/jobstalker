@@ -281,7 +281,7 @@ const ProfilePage = () => {
           <AlertDialog>
             <AlertDialogTrigger asChild>
               <Button variant="outline" className="text-red-600 border-red-600 hover:bg-red-50">
-                Delete My Account
+                Request Account Deletion
               </Button>
             </AlertDialogTrigger>
             <AlertDialogContent>
