@@ -38,14 +38,15 @@ const SignUpForm = () => {
     setIsLoading(true);
     
     try {
-      const { error, data } = await signUp.withEmail(email, password);
+      const response = await signUp.withEmail(email, password);
       
-      if (error) {
-        throw error;
+      if (response.error) {
+        throw response.error;
       }
       
-      // Check if email confirmation is required
-      if (data.session === null) {
+      // Check if email confirmation is required by checking if we have a session
+      // If there's no session, it means email confirmation is pending
+      if (!response.data.session) {
         toast({
           title: "Check your email",
           description: "We've sent you a confirmation link to complete your registration.",
