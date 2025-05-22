@@ -43,6 +43,7 @@ const JobsContent: React.FC<JobsContentProps> = ({ viewMode }) => {
             <div className="col-span-1">Deadline</div>
             <div className="col-span-1">Date Applied</div>
             <div className="col-span-1">Excitement</div>
+            <div className="col-span-1">Notes</div>
           </div>
           
           {jobs.map(job => (
