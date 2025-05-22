@@ -6,37 +6,11 @@ import AddJobDialog from '@/components/jobs/AddJobDialog';
 import JobsStatusSummary from '@/components/jobs/JobsStatusSummary';
 import JobsControlBar from '@/components/jobs/JobsControlBar';
 import JobsContent from '@/components/jobs/JobsContent';
-import { JobsProvider, useJobs } from '@/context/jobs/JobsContext';
+import { useJobs } from '@/context/jobs/JobsContext';
 
 const JobsPage: React.FC = () => {
   const [isAddJobDialogOpen, setIsAddJobDialogOpen] = useState(false);
   const [viewMode, setViewMode] = useState<'list' | 'kanban'>('list');
-
-  return (
-    <JobsProvider>
-      <JobsPageContent 
-        isAddJobDialogOpen={isAddJobDialogOpen}
-        setIsAddJobDialogOpen={setIsAddJobDialogOpen}
-        viewMode={viewMode}
-        setViewMode={setViewMode}
-      />
-    </JobsProvider>
-  );
-};
-
-interface JobsPageContentProps {
-  isAddJobDialogOpen: boolean;
-  setIsAddJobDialogOpen: React.Dispatch<React.SetStateAction<boolean>>;
-  viewMode: 'list' | 'kanban';
-  setViewMode: React.Dispatch<React.SetStateAction<'list' | 'kanban'>>;
-}
-
-const JobsPageContent: React.FC<JobsPageContentProps> = ({
-  isAddJobDialogOpen,
-  setIsAddJobDialogOpen,
-  viewMode,
-  setViewMode
-}) => {
   const { addJob, jobs, isLoading } = useJobs();
 
   return (

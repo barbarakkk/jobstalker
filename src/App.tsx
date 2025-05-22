@@ -5,6 +5,7 @@ import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import { AuthProvider, useAuth } from "./context/auth";
+import { JobsProvider } from "./context/jobs/JobsContext";
 
 import Index from "./pages/Index";
 import NotFound from "./pages/NotFound";
@@ -46,6 +47,15 @@ const ProtectedRoute = ({ children }: { children: React.ReactNode }) => {
   return <>{children}</>;
 };
 
+// Protected routes that need access to the JobsProvider
+const ProtectedJobRoutes = ({ children }: { children: React.ReactNode }) => {
+  return (
+    <JobsProvider>
+      {children}
+    </JobsProvider>
+  );
+};
+
 // Auth wrapper to get access to auth context
 const AuthenticatedApp = () => {
   return (
@@ -60,12 +70,14 @@ const AuthenticatedApp = () => {
       {/* Redirect /dashboard to /jobs */}
       <Route path="/dashboard" element={<Navigate to="/jobs" replace />} />
       
-      {/* Protected routes */}
+      {/* Protected job-related routes - wrapped with both ProtectedRoute and JobsProvider */}
       <Route 
         path="/jobs" 
         element={
           <ProtectedRoute>
-            <Jobs />
+            <ProtectedJobRoutes>
+              <Jobs />
+            </ProtectedJobRoutes>
           </ProtectedRoute>
         } 
       />
@@ -75,7 +87,9 @@ const AuthenticatedApp = () => {
         path="/jobs/:jobId/notes" 
         element={
           <ProtectedRoute>
-            <JobNotes />
+            <ProtectedJobRoutes>
+              <JobNotes />
+            </ProtectedJobRoutes>
           </ProtectedRoute>
         } 
       />
@@ -101,3 +115,4 @@ const App = () => (
 );
 
 export default App;
+
