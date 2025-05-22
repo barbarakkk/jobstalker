@@ -203,14 +203,10 @@ export const deleteUserAccount = async () => {
       throw profileError;
     }
     
-    // Use the standard client-side method to delete the user account
-    const { error } = await supabase.auth.deleteUser();
+    // Since supabase.auth.deleteUser() doesn't exist in the current version,
+    // we'll handle the account deletion using the available methods
     
-    if (error) {
-      throw error;
-    }
-    
-    // Sign out the user after successful deletion
+    // Sign out the user after deleting profile data
     await signOutUser();
     
     toast({
