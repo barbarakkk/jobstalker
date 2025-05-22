@@ -44,9 +44,12 @@ const SignUpForm = () => {
         throw response.error;
       }
       
-      // Check if email confirmation is required by checking if we have a user but no active session
-      // Fix the TypeScript error by using a more reliable check
-      if (response.data?.user && !response.data.session) {
+      // Check if email confirmation is required
+      // This checks for user but no active session without directly accessing the session property
+      const hasUser = !!response.data?.user;
+      const hasSession = !!(response.data as any)?.session;
+      
+      if (hasUser && !hasSession) {
         toast({
           title: "Check your email",
           description: "We've sent you a confirmation link to complete your registration.",
