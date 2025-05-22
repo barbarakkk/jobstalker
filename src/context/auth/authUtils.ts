@@ -1,4 +1,3 @@
-
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "@/hooks/use-toast";
 
@@ -204,17 +203,11 @@ export const deleteUserAccount = async () => {
       throw profileError;
     }
     
-    // Delete the user's auth account
-    const { error } = await supabase.auth.admin.deleteUser(user.id);
+    // Use the standard client-side method to delete the user account
+    const { error } = await supabase.auth.deleteUser();
     
     if (error) {
-      // If admin deletion fails, we'll use the client-side delete method
-      // This requires user re-authentication in some cases, but will work for most scenarios
-      const { error: clientDeleteError } = await supabase.auth.deleteUser();
-      
-      if (clientDeleteError) {
-        throw clientDeleteError;
-      }
+      throw error;
     }
     
     // Sign out the user after successful deletion
