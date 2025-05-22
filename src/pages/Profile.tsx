@@ -119,15 +119,11 @@ const ProfilePage = () => {
       
       if (error) throw error;
       
-      toast({
-        title: "Account deleted",
-        description: "Your account has been deleted successfully.",
-      });
-      
+      // Navigate to home page after successful account deletion request
       navigate('/');
     } catch (error: any) {
       toast({
-        title: "Error deleting account",
+        title: "Error requesting account deletion",
         description: error.message || "Something went wrong. Please try again.",
         variant: "destructive",
       });
@@ -292,14 +288,14 @@ const ProfilePage = () => {
               <AlertDialogHeader>
                 <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
                 <AlertDialogDescription>
-                  This action cannot be undone. This will permanently delete your account
-                  and remove all your data from our servers.
+                  This action cannot be undone. This will submit your account for deletion
+                  and remove your access to the platform.
                 </AlertDialogDescription>
               </AlertDialogHeader>
               <AlertDialogFooter>
                 <AlertDialogCancel>Cancel</AlertDialogCancel>
                 <AlertDialogAction onClick={handleDeleteAccount} className="bg-red-600 hover:bg-red-700">
-                  Delete Account
+                  Request Account Deletion
                 </AlertDialogAction>
               </AlertDialogFooter>
             </AlertDialogContent>

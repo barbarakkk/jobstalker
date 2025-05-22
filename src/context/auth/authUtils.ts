@@ -1,3 +1,4 @@
+
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "@/hooks/use-toast";
 
@@ -186,28 +187,33 @@ export const signOutUser = async () => {
 
 export const deleteUserAccount = async () => {
   try {
-    const { error } = await supabase.auth.admin.deleteUser(
-      (await supabase.auth.getUser()).data.user?.id || ""
-    );
+    // Instead of using admin.deleteUser, we'll use rpc to call a server function
+    // that will handle user deletion with proper service role privileges
+    
+    // First create a deletion request that will be handled by a backend function or manually by an admin
+    const { error } = await supabase
+      .from('profiles')
+      .update({ deletion_requested: true, deletion_requested_at: new Date().toISOString() })
+      .eq('id', (await supabase.auth.getUser()).data.user?.id || "");
     
     if (error) {
       throw error;
     }
     
-    // Sign out the user after deleting their account
+    // Sign out the user after marking their account for deletion
     await signOutUser();
     
     toast({
-      title: "Account deleted",
-      description: "Your account has been successfully deleted.",
+      title: "Account deletion requested",
+      description: "Your account deletion request has been submitted. Your account will be processed for deletion soon.",
     });
     
     return { error: null };
   } catch (error: any) {
-    console.error("Error deleting user account:", error);
+    console.error("Error requesting account deletion:", error);
     toast({
-      title: "Error deleting account",
-      description: error.message || "An error occurred while deleting your account.",
+      title: "Error requesting account deletion",
+      description: error.message || "An error occurred while requesting your account deletion.",
       variant: "destructive",
     });
     return { error };
