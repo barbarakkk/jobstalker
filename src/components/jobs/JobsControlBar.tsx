@@ -2,7 +2,7 @@
 import React from 'react';
 import { Button } from '@/components/ui/button';
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Kanban } from 'lucide-react';
+import { Kanban, List } from 'lucide-react';
 import { useJobs } from '@/context/jobs/JobsContext';
 
 interface JobsControlBarProps {
@@ -35,17 +35,25 @@ const JobsControlBar: React.FC<JobsControlBarProps> = ({
           </>
         )}
         
-        {/* Only show Kanban button */}
+        {/* Restore View Toggle with List and Kanban */}
         <div className="ml-4 md:ml-6">
-          <Button
-            variant={viewMode === 'kanban' ? 'default' : 'outline'}
-            size="sm"
-            className="flex items-center gap-2"
-            onClick={() => setViewMode('kanban')}
+          <Tabs 
+            defaultValue="list" 
+            value={viewMode} 
+            onValueChange={(value) => setViewMode(value as 'list' | 'kanban')}
+            className="w-[240px]"
           >
-            <Kanban size={16} />
-            <span>Kanban</span>
-          </Button>
+            <TabsList className="grid w-full grid-cols-2">
+              <TabsTrigger value="list" className="flex items-center gap-2">
+                <List size={16} />
+                <span>List View</span>
+              </TabsTrigger>
+              <TabsTrigger value="kanban" className="flex items-center gap-2">
+                <Kanban size={16} />
+                <span>Kanban</span>
+              </TabsTrigger>
+            </TabsList>
+          </Tabs>
         </div>
       </div>
       
