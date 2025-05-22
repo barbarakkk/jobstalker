@@ -8,16 +8,12 @@ import { useJobs } from '@/context/jobs/JobsContext';
 interface JobsControlBarProps {
   viewMode: 'list' | 'kanban';
   setViewMode: (mode: 'list' | 'kanban') => void;
-  groupBy: string;
-  setGroupBy: (value: string) => void;
   onOpenAddJobDialog: () => void;
 }
 
 const JobsControlBar: React.FC<JobsControlBarProps> = ({ 
   viewMode, 
   setViewMode, 
-  groupBy, 
-  setGroupBy, 
   onOpenAddJobDialog 
 }) => {
   const { jobs, selectedJobIds, handleSelectAll } = useJobs();
@@ -39,57 +35,21 @@ const JobsControlBar: React.FC<JobsControlBarProps> = ({
           </>
         )}
         
-        {/* View Toggle */}
+        {/* Only show Kanban button */}
         <div className="ml-4 md:ml-6">
-          <Tabs 
-            defaultValue="list" 
-            value={viewMode} 
-            onValueChange={(value) => setViewMode(value as 'list' | 'kanban')}
-            className="w-[240px]"
+          <Button
+            variant={viewMode === 'kanban' ? 'default' : 'outline'}
+            size="sm"
+            className="flex items-center gap-2"
+            onClick={() => setViewMode('kanban')}
           >
-            <TabsList className="grid w-full grid-cols-2">
-              <TabsTrigger value="list">List View</TabsTrigger>
-              <TabsTrigger value="kanban" className="flex items-center gap-2">
-                <Kanban size={16} />
-                <span>Kanban</span>
-              </TabsTrigger>
-            </TabsList>
-          </Tabs>
+            <Kanban size={16} />
+            <span>Kanban</span>
+          </Button>
         </div>
       </div>
       
-      <div className="flex flex-wrap items-center gap-4">
-        {viewMode === 'list' && (
-          <div className="flex items-center gap-2">
-            <span className="text-sm text-gray-600">Group by:</span>
-            <select
-              value={groupBy}
-              onChange={(e) => setGroupBy(e.target.value)}
-              className="rounded border p-1 text-sm"
-            >
-              <option value="none">None</option>
-              <option value="company">Company</option>
-              <option value="location">Location</option>
-            </select>
-          </div>
-        )}
-
-        <Button 
-          variant="outline" 
-          size="sm"
-          className="flex items-center gap-1"
-        >
-          Columns
-        </Button>
-        
-        <Button 
-          variant="outline" 
-          size="sm"
-          className="flex items-center gap-1"
-        >
-          Menu
-        </Button>
-        
+      <div className="flex items-center">
         <Button 
           onClick={onOpenAddJobDialog} 
           className="bg-blue-600 hover:bg-blue-700 text-white"

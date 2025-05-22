@@ -10,7 +10,6 @@ import { JobsProvider, useJobs } from '@/context/jobs/JobsContext';
 
 const JobsPage: React.FC = () => {
   const [isAddJobDialogOpen, setIsAddJobDialogOpen] = useState(false);
-  const [groupBy, setGroupBy] = useState<string>('none');
   const [viewMode, setViewMode] = useState<'list' | 'kanban'>('list');
 
   return (
@@ -18,8 +17,6 @@ const JobsPage: React.FC = () => {
       <JobsPageContent 
         isAddJobDialogOpen={isAddJobDialogOpen}
         setIsAddJobDialogOpen={setIsAddJobDialogOpen}
-        groupBy={groupBy}
-        setGroupBy={setGroupBy}
         viewMode={viewMode}
         setViewMode={setViewMode}
       />
@@ -30,8 +27,6 @@ const JobsPage: React.FC = () => {
 interface JobsPageContentProps {
   isAddJobDialogOpen: boolean;
   setIsAddJobDialogOpen: React.Dispatch<React.SetStateAction<boolean>>;
-  groupBy: string;
-  setGroupBy: React.Dispatch<React.SetStateAction<string>>;
   viewMode: 'list' | 'kanban';
   setViewMode: React.Dispatch<React.SetStateAction<'list' | 'kanban'>>;
 }
@@ -39,8 +34,6 @@ interface JobsPageContentProps {
 const JobsPageContent: React.FC<JobsPageContentProps> = ({
   isAddJobDialogOpen,
   setIsAddJobDialogOpen,
-  groupBy,
-  setGroupBy,
   viewMode,
   setViewMode
 }) => {
@@ -58,8 +51,6 @@ const JobsPageContent: React.FC<JobsPageContentProps> = ({
         <JobsControlBar
           viewMode={viewMode}
           setViewMode={setViewMode}
-          groupBy={groupBy}
-          setGroupBy={setGroupBy}
           onOpenAddJobDialog={() => setIsAddJobDialogOpen(true)}
         />
 
