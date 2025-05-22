@@ -16,6 +16,7 @@ import ResetPassword from "./pages/ResetPassword";
 import AuthCallback from "./pages/AuthCallback";
 import Jobs from "./pages/Jobs";
 import JobNotes from "./pages/JobNotes";
+import Profile from "./pages/Profile";
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -94,6 +95,16 @@ const AuthenticatedApp = () => {
         } 
       />
       
+      {/* Profile Page */}
+      <Route 
+        path="/profile" 
+        element={
+          <ProtectedRoute>
+            <Profile />
+          </ProtectedRoute>
+        } 
+      />
+      
       {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
       <Route path="*" element={<NotFound />} />
     </Routes>
@@ -115,4 +126,3 @@ const App = () => (
 );
 
 export default App;
-

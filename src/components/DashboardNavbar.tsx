@@ -1,6 +1,6 @@
 
 import React, { useState } from 'react';
-import { Link, useLocation } from 'react-router-dom';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { useAuth } from '@/context/auth';
 import { Menu, X, LogOut, User, Briefcase } from 'lucide-react';
@@ -9,6 +9,7 @@ const JobsNavbar = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const { user, signOut } = useAuth();
   const location = useLocation();
+  const navigate = useNavigate();
 
   const toggleMenu = () => {
     setIsMenuOpen(!isMenuOpen);
@@ -19,6 +20,13 @@ const JobsNavbar = () => {
       await signOut();
     } catch (error) {
       console.error('Error signing out:', error);
+    }
+  };
+
+  const handleNavigateToProfile = () => {
+    navigate('/profile');
+    if (isMenuOpen) {
+      setIsMenuOpen(false);
     }
   };
 
@@ -49,7 +57,11 @@ const JobsNavbar = () => {
                   <LogOut size={16} />
                   Log Out
                 </Button>
-                <Button variant="outline" className="flex items-center gap-2">
+                <Button 
+                  variant="outline" 
+                  className="flex items-center gap-2"
+                  onClick={handleNavigateToProfile}
+                >
                   <User size={16} />
                   Profile
                 </Button>
@@ -91,7 +103,11 @@ const JobsNavbar = () => {
                   <LogOut size={16} />
                   Log Out
                 </Button>
-                <Button variant="outline" className="flex justify-start items-center gap-2">
+                <Button 
+                  variant="outline" 
+                  className="flex justify-start items-center gap-2"
+                  onClick={handleNavigateToProfile}
+                >
                   <User size={16} />
                   Profile
                 </Button>
