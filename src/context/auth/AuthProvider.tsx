@@ -13,7 +13,8 @@ import {
   signUpWithGoogle, 
   signUpWithLinkedIn, 
   signOutUser, 
-  resetUserPassword 
+  resetUserPassword,
+  deleteUserAccount
 } from "./authUtils";
 
 export const AuthContext = createContext<AuthContextType | undefined>(undefined);
@@ -94,7 +95,9 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     signUp,
     signOut: signOutUser,
     resetPassword: resetUserPassword,
+    deleteAccount: deleteUserAccount,
   };
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
 }
+

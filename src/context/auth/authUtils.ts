@@ -1,4 +1,3 @@
-
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "@/hooks/use-toast";
 
@@ -182,6 +181,36 @@ export const signOutUser = async () => {
       description: error.message || "An error occurred during sign out.",
       variant: "destructive",
     });
+  }
+};
+
+export const deleteUserAccount = async () => {
+  try {
+    const { error } = await supabase.auth.admin.deleteUser(
+      (await supabase.auth.getUser()).data.user?.id || ""
+    );
+    
+    if (error) {
+      throw error;
+    }
+    
+    // Sign out the user after deleting their account
+    await signOutUser();
+    
+    toast({
+      title: "Account deleted",
+      description: "Your account has been successfully deleted.",
+    });
+    
+    return { error: null };
+  } catch (error: any) {
+    console.error("Error deleting user account:", error);
+    toast({
+      title: "Error deleting account",
+      description: error.message || "An error occurred while deleting your account.",
+      variant: "destructive",
+    });
+    return { error };
   }
 };
 

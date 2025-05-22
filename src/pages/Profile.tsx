@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '@/context/auth';
@@ -12,7 +11,7 @@ import { supabase } from '@/integrations/supabase/client';
 import { Eye, EyeOff } from 'lucide-react';
 
 const ProfilePage = () => {
-  const { user, signOut } = useAuth();
+  const { user, signOut, deleteAccount } = useAuth();
   const navigate = useNavigate();
   const { toast } = useToast();
   
@@ -115,9 +114,10 @@ const ProfilePage = () => {
     try {
       setLoading(true);
       
-      // In a real app, you would call a server endpoint to delete the user
-      // For this demo, we'll just sign out the user
-      await signOut();
+      // Use the deleteAccount function from auth context
+      const { error } = await deleteAccount();
+      
+      if (error) throw error;
       
       toast({
         title: "Account deleted",
