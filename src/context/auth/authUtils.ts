@@ -187,13 +187,15 @@ export const signOutUser = async () => {
 
 export const deleteUserAccount = async () => {
   try {
-    // Instead of using admin.deleteUser, we'll use rpc to call a server function
-    // that will handle user deletion with proper service role privileges
-    
-    // First create a deletion request that will be handled by a backend function or manually by an admin
+    // Instead of using admin.deleteUser, we'll mark the user profile with a timestamp
+    // to indicate they want their account deleted
     const { error } = await supabase
       .from('profiles')
-      .update({ deletion_requested: true, deletion_requested_at: new Date().toISOString() })
+      .update({ 
+        updated_at: new Date().toISOString(),
+        // Store deletion request info in a note in an existing field
+        full_name: "DELETION_REQUESTED_" + new Date().toISOString()
+      })
       .eq('id', (await supabase.auth.getUser()).data.user?.id || "");
     
     if (error) {

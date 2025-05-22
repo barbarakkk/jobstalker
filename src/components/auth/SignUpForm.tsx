@@ -1,3 +1,4 @@
+
 import React, { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -44,8 +45,8 @@ const SignUpForm = () => {
       }
       
       // Check if email confirmation is required by checking if we have a user but no active session
-      // This avoids the TypeScript error by checking for properties in a type-safe way
-      if (response.data?.user && !response.data.session) {
+      // Use optional chaining and 'in' operator to be type-safe
+      if (response.data?.user && 'session' in response.data && response.data.session === null) {
         toast({
           title: "Check your email",
           description: "We've sent you a confirmation link to complete your registration.",
