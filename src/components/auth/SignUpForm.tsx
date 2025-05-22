@@ -44,9 +44,9 @@ const SignUpForm = () => {
         throw response.error;
       }
       
-      // Check if email confirmation is required by checking if we have a session
-      // If there's no session, it means email confirmation is pending
-      if (!response.data.session) {
+      // Check if email confirmation is required by checking if we have a user but no session
+      // This is a more type-safe way to check for email confirmation status
+      if (response.data.user && !response.data.session) {
         toast({
           title: "Check your email",
           description: "We've sent you a confirmation link to complete your registration.",
