@@ -1,7 +1,7 @@
+
 import React from 'react';
 import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { useAuth } from '@/context/auth';
-import Logo from '@/components/layout/Logo';
 
 const DashboardNavbar = () => {
   const { user, signOut } = useAuth();
@@ -26,7 +26,6 @@ const DashboardNavbar = () => {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between h-16">
           <div className="flex items-center">
-            <Logo />
             <div className="ml-10 flex items-baseline space-x-4">
               <Link
                 to="/jobs"
