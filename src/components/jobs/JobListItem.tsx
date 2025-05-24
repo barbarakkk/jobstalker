@@ -1,12 +1,11 @@
 
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { StarIcon, FileText, Edit } from 'lucide-react';
+import { StarIcon } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from '@/components/ui/dropdown-menu';
 import { type Job } from '@/types/job';
 import EditJobDialog from './EditJobDialog';
-import JobNotesDialog from './JobNotesDialog';
 
 interface JobListItemProps {
   job: Job;
@@ -25,7 +24,6 @@ const JobListItem: React.FC<JobListItemProps> = ({
 }) => {
   const navigate = useNavigate();
   const [isEditDialogOpen, setIsEditDialogOpen] = useState(false);
-  const [isNotesDialogOpen, setIsNotesDialogOpen] = useState(false);
 
   // Render stars based on excitement (1-5)
   const renderExcitement = () => {
@@ -141,16 +139,15 @@ const JobListItem: React.FC<JobListItemProps> = ({
           {renderExcitement()}
         </div>
 
-        {/* Notes button/link column */}
+        {/* Notes button column */}
         <div className="col-span-1">
           <Button
-            variant="ghost"
+            variant="outline"
             size="sm"
-            className="p-1 flex items-center gap-1 text-blue-600 hover:text-blue-800"
+            className="text-xs px-3 py-1 h-8"
             onClick={handleNavigateToNotes}
           >
-            <Edit size={16} />
-            <span className="sr-only">View Notes</span>
+            Notes
           </Button>
         </div>
       </div>
