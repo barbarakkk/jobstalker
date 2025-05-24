@@ -48,7 +48,20 @@ Deno.serve(async (req) => {
 
     console.log('Deleting user:', user.id)
 
-    // Delete the user's profile first
+    // Delete all user-related data in the correct order to avoid foreign key constraints
+    
+    // 1. Delete all jobs first (since they reference the user)
+    const { error: jobsError } = await supabaseAdmin
+      .from('jobs')
+      .delete()
+      .eq('user_id', user.id)
+
+    if (jobsError) {
+      console.error('Error deleting jobs:', jobsError)
+      throw new Error(`Failed to delete user jobs: ${jobsError.message}`)
+    }
+
+    // 2. Delete the user's profile
     const { error: profileError } = await supabaseAdmin
       .from('profiles')
       .delete()
@@ -59,7 +72,7 @@ Deno.serve(async (req) => {
       // Continue with user deletion even if profile deletion fails
     }
 
-    // Delete the user account using admin client
+    // 3. Finally delete the user account using admin client
     const { error: deleteError } = await supabaseAdmin.auth.admin.deleteUser(user.id)
 
     if (deleteError) {
