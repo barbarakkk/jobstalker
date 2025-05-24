@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import JobsNavbar from '@/components/DashboardNavbar';
@@ -26,7 +25,6 @@ const JobsPage: React.FC = () => {
             </div>
             <h1 className="text-3xl font-bold text-gray-900 tracking-tight">Job Tracker</h1>
           </div>
-          <p className="text-gray-600 font-medium">Manage and track your job applications</p>
         </div>
         
         <JobsStatusSummary />
