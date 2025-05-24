@@ -1,4 +1,3 @@
-
 import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
@@ -91,6 +90,18 @@ const AuthenticatedApp = () => {
           <ProtectedRoute>
             <ProtectedJobRoutes>
               <JobNotes />
+            </ProtectedJobRoutes>
+          </ProtectedRoute>
+        } 
+      />
+      
+      {/* Statistics Page */}
+      <Route 
+        path="/statistics" 
+        element={
+          <ProtectedRoute>
+            <ProtectedJobRoutes>
+              <Statistics />
             </ProtectedJobRoutes>
           </ProtectedRoute>
         } 
