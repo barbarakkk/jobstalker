@@ -2,7 +2,7 @@
 import React from 'react';
 import { Button } from '@/components/ui/button';
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Kanban, List } from 'lucide-react';
+import { Kanban, List, Plus } from 'lucide-react';
 import { useJobs } from '@/context/jobs/JobsContext';
 
 interface JobsControlBarProps {
@@ -19,18 +19,18 @@ const JobsControlBar: React.FC<JobsControlBarProps> = ({
   const { jobs, selectedJobIds, handleSelectAll } = useJobs();
 
   return (
-    <div className="bg-white p-6 rounded-xl shadow-lg mb-6 flex flex-col md:flex-row md:justify-between md:items-center gap-4 border border-gray-100">
-      <div className="flex items-center gap-4">
+    <div className="bg-white/90 backdrop-blur-sm p-8 rounded-2xl shadow-lg shadow-gray-900/5 mb-8 flex flex-col md:flex-row md:justify-between md:items-center gap-6 border border-gray-200/60">
+      <div className="flex items-center gap-6">
         {viewMode === 'list' && (
           <>
-            <div className="flex items-center gap-3">
+            <div className="flex items-center gap-4">
               <input
                 type="checkbox"
                 checked={selectedJobIds.size > 0 && selectedJobIds.size === jobs.length}
                 onChange={(e) => handleSelectAll(e.target.checked)}
-                className="rounded-md h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300"
+                className="rounded-lg h-5 w-5 text-blue-600 focus:ring-blue-500 border-gray-300 shadow-sm"
               />
-              <span className="text-sm text-gray-600 font-medium">
+              <span className="text-sm text-gray-700 font-semibold">
                 {selectedJobIds.size} selected
               </span>
             </div>
@@ -43,19 +43,19 @@ const JobsControlBar: React.FC<JobsControlBarProps> = ({
             defaultValue="list" 
             value={viewMode} 
             onValueChange={(value) => setViewMode(value as 'list' | 'kanban')}
-            className="w-[300px]"
+            className="w-[280px]"
           >
-            <TabsList className="grid w-full grid-cols-2 bg-gray-100 rounded-lg p-1.5 shadow-inner">
+            <TabsList className="grid w-full grid-cols-2 bg-gray-100/80 backdrop-blur-sm rounded-2xl p-2 shadow-inner border border-gray-200/60">
               <TabsTrigger 
                 value="list" 
-                className="flex items-center gap-2 rounded-lg px-4 py-2.5 text-sm font-semibold transition-all duration-200 data-[state=active]:bg-blue-600 data-[state=active]:text-white data-[state=active]:shadow-lg hover:bg-gray-200 data-[state=active]:hover:bg-blue-700 data-[state=active]:transform data-[state=active]:scale-105"
+                className="flex items-center gap-3 rounded-xl px-5 py-3 text-sm font-bold transition-all duration-300 data-[state=active]:bg-gradient-to-r data-[state=active]:from-blue-600 data-[state=active]:to-blue-700 data-[state=active]:text-white data-[state=active]:shadow-lg data-[state=active]:shadow-blue-600/25 hover:bg-gray-200/80 data-[state=active]:hover:from-blue-700 data-[state=active]:hover:to-blue-800 data-[state=active]:transform data-[state=active]:scale-105 text-gray-600 hover:text-gray-900"
               >
                 <List size={16} />
                 <span>List View</span>
               </TabsTrigger>
               <TabsTrigger 
                 value="kanban" 
-                className="flex items-center gap-2 rounded-lg px-4 py-2.5 text-sm font-semibold transition-all duration-200 data-[state=active]:bg-blue-600 data-[state=active]:text-white data-[state=active]:shadow-lg hover:bg-gray-200 data-[state=active]:hover:bg-blue-700 data-[state=active]:transform data-[state=active]:scale-105"
+                className="flex items-center gap-3 rounded-xl px-5 py-3 text-sm font-bold transition-all duration-300 data-[state=active]:bg-gradient-to-r data-[state=active]:from-blue-600 data-[state=active]:to-blue-700 data-[state=active]:text-white data-[state=active]:shadow-lg data-[state=active]:shadow-blue-600/25 hover:bg-gray-200/80 data-[state=active]:hover:from-blue-700 data-[state=active]:hover:to-blue-800 data-[state=active]:transform data-[state=active]:scale-105 text-gray-600 hover:text-gray-900"
               >
                 <Kanban size={16} />
                 <span>Kanban View</span>
@@ -68,9 +68,10 @@ const JobsControlBar: React.FC<JobsControlBarProps> = ({
       <div className="flex items-center">
         <Button 
           onClick={onOpenAddJobDialog} 
-          className="bg-blue-600 hover:bg-blue-700 text-white font-semibold px-6 py-3 rounded-lg shadow-lg hover:shadow-xl transition-all duration-200 transform hover:-translate-y-0.5"
+          className="bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 text-white font-bold px-8 py-3 rounded-xl shadow-lg shadow-blue-600/25 hover:shadow-xl hover:shadow-blue-600/30 transition-all duration-300 transform hover:-translate-y-0.5 active:scale-[0.98] flex items-center gap-2"
         >
-          Add a New Job
+          <Plus size={18} />
+          Add New Job
         </Button>
       </div>
     </div>

@@ -3,6 +3,7 @@ import React from 'react';
 import JobListItem from '@/components/jobs/JobListItem';
 import JobsKanbanView from '@/components/jobs/JobsKanbanView';
 import { useJobs } from '@/context/jobs/JobsContext';
+import { Loader2 } from 'lucide-react';
 
 interface JobsContentProps {
   viewMode: 'list' | 'kanban';
@@ -13,17 +14,22 @@ const JobsContent: React.FC<JobsContentProps> = ({ viewMode }) => {
 
   if (isLoading) {
     return (
-      <div className="bg-white rounded-lg shadow p-8 text-center">
-        <div className="animate-spin rounded-full h-10 w-10 border-t-2 border-b-2 border-blue-600 mx-auto mb-4"></div>
-        <p className="text-gray-600">Loading your job applications...</p>
+      <div className="bg-white/90 backdrop-blur-sm rounded-2xl shadow-lg shadow-gray-900/5 p-12 text-center border border-gray-200/60">
+        <div className="flex flex-col items-center gap-4">
+          <Loader2 className="h-10 w-10 animate-spin text-blue-600" />
+          <div>
+            <h3 className="text-lg font-bold text-gray-900 mb-2">Loading your applications</h3>
+            <p className="text-gray-600 font-medium">Please wait while we fetch your job data...</p>
+          </div>
+        </div>
       </div>
     );
   }
 
   if (jobs.length === 0) {
     return (
-      <div className="bg-white rounded-lg shadow p-8 text-center">
-        <p className="text-gray-600 mb-4">No jobs found. Add your first job application!</p>
+      <div className="bg-white/90 backdrop-blur-sm rounded-2xl shadow-lg shadow-gray-900/5 p-12 text-center border border-gray-200/60">
+        <p className="text-gray-600 mb-4 font-medium">No jobs found. Add your first job application!</p>
       </div>
     );
   }
@@ -32,8 +38,8 @@ const JobsContent: React.FC<JobsContentProps> = ({ viewMode }) => {
     <>
       {viewMode === 'list' ? (
         /* List View */
-        <div className="bg-white rounded-lg shadow overflow-x-auto">
-          <div className="grid grid-cols-12 py-2 px-4 bg-gray-50 rounded-t-lg border-b text-sm font-medium text-gray-600">
+        <div className="bg-white/90 backdrop-blur-sm rounded-2xl shadow-lg shadow-gray-900/5 overflow-hidden border border-gray-200/60">
+          <div className="grid grid-cols-12 py-4 px-6 bg-gray-50/80 backdrop-blur-sm border-b border-gray-200/60 text-sm font-bold text-gray-700">
             <div className="col-span-1"></div>
             <div className="col-span-3">Job Title / Company</div>
             <div className="col-span-1">Salary</div>
