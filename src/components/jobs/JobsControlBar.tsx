@@ -35,22 +35,28 @@ const JobsControlBar: React.FC<JobsControlBarProps> = ({
           </>
         )}
         
-        {/* Restore View Toggle with List and Kanban */}
+        {/* Updated View Toggle with modern styling */}
         <div className="ml-4 md:ml-6">
           <Tabs 
             defaultValue="list" 
             value={viewMode} 
             onValueChange={(value) => setViewMode(value as 'list' | 'kanban')}
-            className="w-[240px]"
+            className="w-[280px]"
           >
-            <TabsList className="grid w-full grid-cols-2">
-              <TabsTrigger value="list" className="flex items-center gap-2">
+            <TabsList className="grid w-full grid-cols-2 bg-gray-100 rounded-md p-1">
+              <TabsTrigger 
+                value="list" 
+                className="flex items-center gap-2 rounded-md px-3 py-2 text-sm font-medium transition-all data-[state=active]:bg-blue-600 data-[state=active]:text-white data-[state=active]:shadow-sm hover:bg-gray-200 data-[state=active]:hover:bg-blue-700"
+              >
                 <List size={16} />
                 <span>List View</span>
               </TabsTrigger>
-              <TabsTrigger value="kanban" className="flex items-center gap-2">
+              <TabsTrigger 
+                value="kanban" 
+                className="flex items-center gap-2 rounded-md px-3 py-2 text-sm font-medium transition-all data-[state=active]:bg-blue-600 data-[state=active]:text-white data-[state=active]:shadow-sm hover:bg-gray-200 data-[state=active]:hover:bg-blue-700"
+              >
                 <Kanban size={16} />
-                <span>Kanban</span>
+                <span>Kanban View</span>
               </TabsTrigger>
             </TabsList>
           </Tabs>
