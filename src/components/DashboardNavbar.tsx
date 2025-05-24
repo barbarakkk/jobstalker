@@ -1,123 +1,82 @@
-
-import React, { useState } from 'react';
-import { Link, useLocation, useNavigate } from 'react-router-dom';
-import { Button } from '@/components/ui/button';
+import React from 'react';
+import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { useAuth } from '@/context/auth';
-import { Menu, X, LogOut, User, Briefcase } from 'lucide-react';
+import Logo from '@/components/Logo';
 
-const JobsNavbar = () => {
-  const [isMenuOpen, setIsMenuOpen] = useState(false);
+const DashboardNavbar = () => {
   const { user, signOut } = useAuth();
-  const location = useLocation();
   const navigate = useNavigate();
-
-  const toggleMenu = () => {
-    setIsMenuOpen(!isMenuOpen);
-  };
+  const location = useLocation();
 
   const handleSignOut = async () => {
     try {
       await signOut();
+      navigate('/');
     } catch (error) {
-      console.error('Error signing out:', error);
+      console.error('Sign out error:', error);
     }
   };
 
-  const handleNavigateToProfile = () => {
-    navigate('/profile');
-    if (isMenuOpen) {
-      setIsMenuOpen(false);
-    }
-  };
+  const isJobsPage = location.pathname === '/jobs';
+  const isStatisticsPage = location.pathname === '/statistics';
+  const isProfilePage = location.pathname === '/profile';
 
   return (
-    <nav className="py-4 px-6 md:px-10 fixed top-0 left-0 right-0 bg-white/80 backdrop-blur-md z-50 border-b border-gray-100">
-      <div className="container mx-auto">
-        <div className="flex justify-between items-center">
-          {/* Logo */}
+    <nav className="bg-white shadow-sm border-b border-gray-200">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="flex justify-between h-16">
           <div className="flex items-center">
-            <Link to="/jobs" className="flex items-center gap-2">
-              <div className="bg-blue-600 text-white rounded-md w-8 h-8 flex items-center justify-center text-lg font-bold">JS</div>
-              <span className="text-xl font-bold text-gray-800">JobStalker</span>
-            </Link>
+            <Logo />
+            <div className="ml-10 flex items-baseline space-x-4">
+              <Link
+                to="/jobs"
+                className={`px-3 py-2 rounded-md text-sm font-medium transition-colors ${
+                  isJobsPage
+                    ? 'text-blue-600 bg-blue-50'
+                    : 'text-gray-600 hover:text-gray-900 hover:bg-gray-50'
+                }`}
+              >
+                Jobs
+              </Link>
+              <Link
+                to="/statistics"
+                className={`px-3 py-2 rounded-md text-sm font-medium transition-colors ${
+                  isStatisticsPage
+                    ? 'text-blue-600 bg-blue-50'
+                    : 'text-gray-600 hover:text-gray-900 hover:bg-gray-50'
+                }`}
+              >
+                Statistics
+              </Link>
+            </div>
           </div>
 
-          {/* Desktop Navigation */}
-          <div className="hidden md:flex items-center gap-8">
-            <Link 
-              to="/jobs" 
-              className="text-blue-700 transition-colors"
-            >
-              Job Tracker
-            </Link>
-            
+          <div className="flex items-center space-x-4">
             {user && (
-              <div className="flex items-center gap-3">
-                <Button variant="ghost" className="flex items-center gap-2" onClick={handleSignOut}>
-                  <LogOut size={16} />
-                  Log Out
-                </Button>
-                <Button 
-                  variant="outline" 
-                  className="flex items-center gap-2"
-                  onClick={handleNavigateToProfile}
+              <>
+                <Link
+                  to="/profile"
+                  className={`px-3 py-2 rounded-md text-sm font-medium transition-colors ${
+                    isProfilePage
+                      ? 'text-blue-600 bg-blue-50'
+                      : 'text-gray-600 hover:text-gray-900 hover:bg-gray-50'
+                  }`}
                 >
-                  <User size={16} />
                   Profile
-                </Button>
-              </div>
+                </Link>
+                <button
+                  onClick={handleSignOut}
+                  className="bg-red-50 hover:bg-red-100 text-red-600 font-medium py-2 px-4 rounded-md text-sm transition-colors"
+                >
+                  Sign Out
+                </button>
+              </>
             )}
-          </div>
-
-          {/* Mobile menu button */}
-          <div className="md:hidden">
-            <Button variant="ghost" size="icon" onClick={toggleMenu}>
-              {isMenuOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
-            </Button>
           </div>
         </div>
       </div>
-
-      {/* Mobile menu */}
-      {isMenuOpen && (
-        <div className="md:hidden absolute top-[72px] left-0 right-0 bg-white border-b border-gray-200 py-4 px-6 z-50">
-          <div className="flex flex-col space-y-4">
-            <Link 
-              to="/jobs" 
-              className="text-blue-700 py-2 transition-colors" 
-              onClick={toggleMenu}
-            >
-              Job Tracker
-            </Link>
-            
-            {user && (
-              <div className="flex flex-col gap-3 pt-4 border-t border-gray-100">
-                <Button 
-                  variant="ghost" 
-                  className="flex justify-start items-center gap-2"
-                  onClick={() => {
-                    toggleMenu();
-                    handleSignOut();
-                  }}
-                >
-                  <LogOut size={16} />
-                  Log Out
-                </Button>
-                <Button 
-                  variant="outline" 
-                  className="flex justify-start items-center gap-2"
-                  onClick={handleNavigateToProfile}
-                >
-                  <User size={16} />
-                  Profile
-                </Button>
-              </div>
-            )}
-          </div>
-        </div>
-      )}
     </nav>
   );
 };
 
-export default JobsNavbar;
+export default DashboardNavbar;

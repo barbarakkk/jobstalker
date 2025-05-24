@@ -16,6 +16,7 @@ import ResetPassword from "./pages/ResetPassword";
 import AuthCallback from "./pages/AuthCallback";
 import Jobs from "./pages/Jobs";
 import JobNotes from "./pages/JobNotes";
+import Statistics from "./pages/Statistics";
 import Profile from "./pages/Profile";
 
 const queryClient = new QueryClient({
