@@ -19,6 +19,7 @@ const DashboardNavbar = () => {
 
   const isJobsPage = location.pathname === '/jobs';
   const isStatisticsPage = location.pathname === '/statistics';
+  const isResumeBuilderPage = location.pathname === '/resume-builder';
   const isProfilePage = location.pathname === '/profile';
 
   return (
@@ -59,6 +60,16 @@ const DashboardNavbar = () => {
               }`}
             >
               Statistics
+            </Link>
+            <Link
+              to="/resume-builder"
+              className={`px-6 py-3 rounded-xl text-sm font-semibold transition-all duration-200 ${
+                isResumeBuilderPage
+                  ? 'text-blue-700 bg-blue-50 shadow-sm'
+                  : 'text-gray-600 hover:text-gray-900 hover:bg-gray-50'
+              }`}
+            >
+              AI Resume Builder
             </Link>
           </div>
 

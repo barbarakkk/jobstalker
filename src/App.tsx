@@ -1,3 +1,4 @@
+
 import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
@@ -17,6 +18,7 @@ import Jobs from "./pages/Jobs";
 import JobNotes from "./pages/JobNotes";
 import Statistics from "./pages/Statistics";
 import Profile from "./pages/Profile";
+import ResumeBuilder from "./pages/ResumeBuilder";
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -103,6 +105,16 @@ const AuthenticatedApp = () => {
             <ProtectedJobRoutes>
               <Statistics />
             </ProtectedJobRoutes>
+          </ProtectedRoute>
+        } 
+      />
+      
+      {/* AI Resume Builder Page */}
+      <Route 
+        path="/resume-builder" 
+        element={
+          <ProtectedRoute>
+            <ResumeBuilder />
           </ProtectedRoute>
         } 
       />
