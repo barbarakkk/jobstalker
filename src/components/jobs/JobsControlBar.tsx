@@ -2,7 +2,7 @@
 import React from 'react';
 import { Button } from '@/components/ui/button';
 import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";
-import { Kanban, List, Plus } from 'lucide-react';
+import { Plus } from 'lucide-react';
 import { useJobs } from '@/context/jobs/JobsContext';
 
 interface JobsControlBarProps {
@@ -47,14 +47,12 @@ const JobsControlBar: React.FC<JobsControlBarProps> = ({
               value="list" 
               className="flex items-center justify-center gap-2 rounded-xl px-4 py-3 text-sm font-bold transition-all duration-300 data-[state=on]:bg-gradient-to-r data-[state=on]:from-blue-600 data-[state=on]:to-blue-700 data-[state=on]:text-white data-[state=on]:shadow-lg data-[state=on]:shadow-blue-600/25 hover:bg-gray-200/80 data-[state=on]:hover:from-blue-700 data-[state=on]:hover:to-blue-800 text-gray-600 hover:text-gray-900 whitespace-nowrap"
             >
-              <List size={16} className="flex-shrink-0" />
               <span>List View</span>
             </ToggleGroupItem>
             <ToggleGroupItem 
               value="kanban" 
               className="flex items-center justify-center gap-2 rounded-xl px-4 py-3 text-sm font-bold transition-all duration-300 data-[state=on]:bg-gradient-to-r data-[state=on]:from-blue-600 data-[state=on]:to-blue-700 data-[state=on]:text-white data-[state=on]:shadow-lg data-[state=on]:shadow-blue-600/25 hover:bg-gray-200/80 data-[state=on]:hover:from-blue-700 data-[state=on]:hover:to-blue-800 text-gray-600 hover:text-gray-900 whitespace-nowrap"
             >
-              <Kanban size={16} className="flex-shrink-0" />
               <span>Kanban</span>
             </ToggleGroupItem>
           </ToggleGroup>
