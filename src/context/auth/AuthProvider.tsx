@@ -27,29 +27,28 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const { toast } = useToast();
 
   useEffect(() => {
+    let mounted = true;
+
     // Set up auth state listener first
     const { data: { subscription } } = supabase.auth.onAuthStateChange(
-      (event, currentSession) => {
+      async (event, currentSession) => {
         console.log("Auth state changed:", event, currentSession?.user?.id);
+        
+        if (!mounted) return;
+
         setSession(currentSession);
         setUser(currentSession?.user ?? null);
         
-        // Don't set isLoading to false here, as we do that after checking the initial session
-        
         if (event === "SIGNED_IN" && currentSession) {
-          // Defer navigation with setTimeout to avoid potential deadlocks
-          setTimeout(() => {
-            toast({
-              title: "Signed in successfully",
-              description: "Welcome back!",
-            });
-            navigate("/jobs");
-          }, 0);
+          console.log("User signed in successfully, navigating to jobs");
+          toast({
+            title: "Signed in successfully",
+            description: "Welcome back!",
+          });
+          navigate("/jobs");
         } else if (event === "SIGNED_OUT") {
-          // Defer navigation with setTimeout to avoid potential deadlocks
-          setTimeout(() => {
-            navigate("/login");
-          }, 0);
+          console.log("User signed out, navigating to login");
+          navigate("/login");
         }
       }
     );
@@ -57,20 +56,32 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     // Then check for existing session
     const checkSession = async () => {
       try {
-        const { data: { session: currentSession } } = await supabase.auth.getSession();
+        const { data: { session: currentSession }, error } = await supabase.auth.getSession();
+        
+        if (error) {
+          console.error("Error checking session:", error);
+          return;
+        }
+        
         console.log("Initial session check:", currentSession?.user?.id || "No session");
+        
+        if (!mounted) return;
+        
         setSession(currentSession);
         setUser(currentSession?.user ?? null);
       } catch (error) {
         console.error("Error checking session:", error);
       } finally {
-        setIsLoading(false);
+        if (mounted) {
+          setIsLoading(false);
+        }
       }
     };
     
     checkSession();
 
     return () => {
+      mounted = false;
       subscription.unsubscribe();
     };
   }, [navigate, toast]);
@@ -100,4 +111,3 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
 }
-

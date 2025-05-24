@@ -34,6 +34,10 @@ export const signInWithGoogle = async () => {
       provider: "google",
       options: {
         redirectTo: `${window.location.origin}/auth/callback`,
+        queryParams: {
+          access_type: 'offline',
+          prompt: 'consent',
+        }
       },
     });
     
@@ -42,7 +46,7 @@ export const signInWithGoogle = async () => {
       throw error;
     }
     
-    console.log("Google sign in data:", data);
+    console.log("Google sign in initiated successfully");
   } catch (error: any) {
     console.error("Google sign in catch error:", error);
     toast({
@@ -57,7 +61,7 @@ export const signInWithLinkedIn = async () => {
   try {
     console.log("Starting LinkedIn sign in...");
     const { data, error } = await supabase.auth.signInWithOAuth({
-      provider: "linkedin_oidc", // Updated from linkedin to linkedin_oidc
+      provider: "linkedin_oidc",
       options: {
         redirectTo: `${window.location.origin}/auth/callback`,
       },
@@ -68,7 +72,7 @@ export const signInWithLinkedIn = async () => {
       throw error;
     }
     
-    console.log("LinkedIn sign in data:", data);
+    console.log("LinkedIn sign in initiated successfully");
   } catch (error: any) {
     console.error("LinkedIn sign in catch error:", error);
     toast({
@@ -147,7 +151,7 @@ export const signUpWithLinkedIn = async () => {
   try {
     console.log("Starting LinkedIn sign up...");
     const { data, error } = await supabase.auth.signInWithOAuth({
-      provider: "linkedin_oidc", // Updated from linkedin to linkedin_oidc
+      provider: "linkedin_oidc",
       options: {
         redirectTo: `${window.location.origin}/auth/callback`,
       },
