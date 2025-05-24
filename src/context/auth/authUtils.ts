@@ -186,32 +186,42 @@ export const signOutUser = async () => {
 
 export const deleteUserAccount = async () => {
   try {
-    // Get the current user
-    const { data: { user } } = await supabase.auth.getUser();
+    // Get the current user and their session
+    const { data: { user }, error: userError } = await supabase.auth.getUser();
+    const { data: { session }, error: sessionError } = await supabase.auth.getSession();
     
-    if (!user) {
+    if (userError || !user) {
       throw new Error("No authenticated user found");
     }
     
-    // First, delete the user data from profiles table
-    const { error: profileError } = await supabase
-      .from('profiles')
-      .delete()
-      .eq('id', user.id);
-      
-    if (profileError) {
-      throw profileError;
+    if (sessionError || !session) {
+      throw new Error("No valid session found");
     }
     
-    // Since supabase.auth.deleteUser() doesn't exist in the current version,
-    // we'll handle the account deletion using the available methods
+    console.log("Calling delete-user function for user:", user.id);
     
-    // Sign out the user after deleting profile data
-    await signOutUser();
+    // Call the Edge Function to delete the user account
+    const { data, error } = await supabase.functions.invoke('delete-user', {
+      headers: {
+        Authorization: `Bearer ${session.access_token}`,
+      },
+    });
+    
+    if (error) {
+      console.error("Edge function error:", error);
+      throw error;
+    }
+    
+    if (data?.error) {
+      console.error("Delete user error:", data.error);
+      throw new Error(data.error);
+    }
+    
+    console.log("User account deleted successfully");
     
     toast({
       title: "Account deleted",
-      description: "Your account has been successfully deleted.",
+      description: "Your account has been permanently deleted.",
     });
     
     return { error: null };
