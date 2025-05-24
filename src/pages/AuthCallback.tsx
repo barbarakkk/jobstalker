@@ -14,17 +14,35 @@ const AuthCallback = () => {
     const handleAuthCallback = async () => {
       try {
         console.log("Handling auth callback...");
+        console.log("Current URL:", window.location.href);
+        
         setLoading(true);
         
-        // Handle the auth callback from URL parameters
+        // Parse the URL fragment for auth tokens
+        const hashParams = new URLSearchParams(window.location.hash.substring(1));
+        const searchParams = new URLSearchParams(window.location.search);
+        
+        console.log("Hash params:", Object.fromEntries(hashParams.entries()));
+        console.log("Search params:", Object.fromEntries(searchParams.entries()));
+        
+        // Check for errors in URL
+        const urlError = hashParams.get('error') || searchParams.get('error');
+        const errorDescription = hashParams.get('error_description') || searchParams.get('error_description');
+        
+        if (urlError) {
+          throw new Error(errorDescription || urlError);
+        }
+        
+        // Get session after handling the callback
         const { data, error: authError } = await supabase.auth.getSession();
         
         if (authError) {
+          console.error("Session error:", authError);
           throw authError;
         }
         
         if (data?.session) {
-          console.log("Auth callback successful, session found");
+          console.log("Auth callback successful, session found:", data.session.user.id);
           toast({
             title: "Authentication successful",
             description: "You have been signed in successfully.",
@@ -34,11 +52,20 @@ const AuthCallback = () => {
           navigate('/jobs', { replace: true });
         } else {
           console.log("Auth callback completed but no session found");
-          setError("Authentication completed but no session was created. Please try signing in again.");
           
-          setTimeout(() => {
-            navigate('/login', { replace: true });
-          }, 2000);
+          // Wait a moment and try again
+          setTimeout(async () => {
+            const { data: retryData } = await supabase.auth.getSession();
+            if (retryData?.session) {
+              console.log("Session found on retry");
+              navigate('/jobs', { replace: true });
+            } else {
+              setError("Authentication completed but no session was created. Please try signing in again.");
+              setTimeout(() => {
+                navigate('/login', { replace: true });
+              }, 3000);
+            }
+          }, 1000);
         }
       } catch (err: any) {
         console.error('Auth callback error:', err);
@@ -52,7 +79,7 @@ const AuthCallback = () => {
         
         setTimeout(() => {
           navigate('/login', { replace: true });
-        }, 2000);
+        }, 3000);
       } finally {
         setLoading(false);
       }
