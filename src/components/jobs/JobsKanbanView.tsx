@@ -80,25 +80,25 @@ const JobsKanbanView: React.FC<JobsKanbanViewProps> = ({ jobs, onUpdateJob, onDe
 
   return (
     <>
-      <div className="flex flex-nowrap gap-6 overflow-x-auto pb-6 pt-2" style={{ minHeight: '70vh' }}>
+      <div className="grid grid-cols-6 gap-4 h-[70vh]">
         {columns.map(column => {
           const columnJobs = jobs.filter(job => job.status === column.id);
           
           return (
             <div 
               key={column.id}
-              className={`flex-shrink-0 w-80 flex flex-col rounded-xl ${column.color} border-2 shadow-lg hover:shadow-xl transition-all duration-200`}
+              className={`flex flex-col rounded-xl ${column.color} border-2 shadow-lg hover:shadow-xl transition-all duration-200`}
               onDrop={(e) => handleDrop(e, column.id)}
               onDragOver={handleDragOver}
             >
-              <div className="p-4 border-b-2 border-white/50 font-semibold flex justify-between items-center bg-white/40 rounded-t-xl">
-                <span className="text-gray-800">{column.title}</span>
-                <span className="bg-white text-gray-700 h-7 w-7 rounded-full flex items-center justify-center text-sm font-bold shadow-sm">
+              <div className="p-3 border-b-2 border-white/50 font-semibold flex justify-between items-center bg-white/40 rounded-t-xl">
+                <span className="text-gray-800 text-sm font-bold truncate">{column.title}</span>
+                <span className="bg-white text-gray-700 h-6 w-6 rounded-full flex items-center justify-center text-xs font-bold shadow-sm flex-shrink-0">
                   {columnJobs.length}
                 </span>
               </div>
               
-              <div className="p-3 flex-grow overflow-y-auto space-y-3">
+              <div className="p-2 flex-grow overflow-y-auto space-y-2">
                 {columnJobs.map(job => (
                   <Card 
                     key={job.id}
@@ -106,32 +106,32 @@ const JobsKanbanView: React.FC<JobsKanbanViewProps> = ({ jobs, onUpdateJob, onDe
                     draggable
                     onDragStart={(e) => handleDragStart(e, job)}
                   >
-                    <CardContent className="p-4">
-                      <div className="font-semibold text-gray-900 truncate mb-1">{job.title}</div>
-                      <div className="text-sm text-gray-600 mb-3 font-medium">{job.company}</div>
+                    <CardContent className="p-3">
+                      <div className="font-semibold text-gray-900 truncate mb-1 text-sm">{job.title}</div>
+                      <div className="text-xs text-gray-600 mb-2 font-medium truncate">{job.company}</div>
                       
-                      <div className="flex justify-between items-center text-xs text-gray-500 mb-3">
-                        <div className="truncate max-w-[120px] bg-gray-100 px-2 py-1 rounded-md">{job.location}</div>
+                      <div className="flex justify-between items-center text-xs text-gray-500 mb-2">
+                        <div className="truncate max-w-[80px] bg-gray-100 px-1 py-0.5 rounded text-xs">{job.location}</div>
                         {renderExcitement(job.excitement)}
                       </div>
                       
                       <div className="flex justify-between items-center text-xs">
-                        <div className="text-gray-600 bg-gray-50 px-2 py-1 rounded-md">
+                        <div className="text-gray-600 bg-gray-50 px-1 py-0.5 rounded text-xs truncate max-w-[100px]">
                           {job.deadline ? `Due: ${job.deadline}` : "No deadline"}
                         </div>
                         
-                        <div className="flex gap-2">
+                        <div className="flex gap-1 flex-shrink-0">
                           <button
                             onClick={() => openNotesDialog(job)}
-                            className="text-blue-600 hover:text-blue-800 hover:bg-blue-50 p-1 rounded-md transition-colors duration-200"
+                            className="text-blue-600 hover:text-blue-800 hover:bg-blue-50 p-1 rounded transition-colors duration-200"
                           >
-                            <FileText size={16} />
+                            <FileText size={14} />
                           </button>
                           <button 
                             onClick={() => onDeleteJob(job.id)}
-                            className="text-red-600 hover:text-red-800 hover:bg-red-50 p-1 rounded-md transition-colors duration-200"
+                            className="text-red-600 hover:text-red-800 hover:bg-red-50 p-1 rounded transition-colors duration-200 text-xs"
                           >
-                            Delete
+                            ×
                           </button>
                         </div>
                       </div>
@@ -140,7 +140,7 @@ const JobsKanbanView: React.FC<JobsKanbanViewProps> = ({ jobs, onUpdateJob, onDe
                 ))}
                 
                 {columnJobs.length === 0 && (
-                  <div className="text-center py-12 text-gray-400 text-sm italic bg-white/30 rounded-lg border-2 border-dashed border-gray-300">
+                  <div className="text-center py-8 text-gray-400 text-xs italic bg-white/30 rounded-lg border-2 border-dashed border-gray-300">
                     No jobs in this status
                   </div>
                 )}
