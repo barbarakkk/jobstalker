@@ -1,3 +1,4 @@
+
 import React, { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import JobsNavbar from '@/components/DashboardNavbar';
@@ -18,15 +19,6 @@ const JobsPage: React.FC = () => {
       <JobsNavbar />
       
       <main className="container mx-auto py-6 px-6 pt-24">
-        <div className="mb-8">
-          <div className="flex items-center gap-3 mb-2">
-            <div className="p-2 bg-gradient-to-r from-blue-600 to-blue-700 rounded-xl shadow-lg shadow-blue-600/25">
-              <Briefcase className="h-6 w-6 text-white" />
-            </div>
-            <h1 className="text-3xl font-bold text-gray-900 tracking-tight">Job Tracker</h1>
-          </div>
-        </div>
-        
         <JobsStatusSummary />
 
         <JobsControlBar
