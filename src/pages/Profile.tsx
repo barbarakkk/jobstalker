@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '@/context/auth';
@@ -15,8 +16,6 @@ const ProfilePage = () => {
   const navigate = useNavigate();
   const { toast } = useToast();
   
-  const [firstName, setFirstName] = useState('');
-  const [lastName, setLastName] = useState('');
   const [email, setEmail] = useState('');
   const [newPassword, setNewPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
@@ -26,42 +25,9 @@ const ProfilePage = () => {
 
   useEffect(() => {
     if (user) {
-      // Get user metadata if available
-      const metadata = user.user_metadata || {};
-      setFirstName(metadata.first_name || '');
-      setLastName(metadata.last_name || '');
       setEmail(user.email || '');
     }
   }, [user]);
-
-  const handleSaveProfile = async () => {
-    try {
-      setLoading(true);
-      
-      // Update user metadata
-      const { error } = await supabase.auth.updateUser({
-        data: {
-          first_name: firstName,
-          last_name: lastName,
-        }
-      });
-
-      if (error) throw error;
-
-      toast({
-        title: "Profile updated",
-        description: "Your profile information has been updated successfully.",
-      });
-    } catch (error: any) {
-      toast({
-        title: "Error updating profile",
-        description: error.message || "Something went wrong. Please try again.",
-        variant: "destructive",
-      });
-    } finally {
-      setLoading(false);
-    }
-  };
 
   const handleChangePassword = async () => {
     if (newPassword !== confirmPassword) {
@@ -152,7 +118,7 @@ const ProfilePage = () => {
       <main className="container mx-auto py-6 px-6 pt-20">
         {/* Tab navigation */}
         <div className="flex mb-6">
-          <div className="bg-gray-100 rounded-l-lg px-6 py-3 font-medium text-green-800 border-b-2 border-green-800">
+          <div className="bg-gray-100 rounded-l-lg px-6 py-3 font-medium text-blue-800 border-b-2 border-blue-800">
             My Account
           </div>
           <div className="bg-gray-100 rounded-r-lg px-6 py-3 text-gray-600">
@@ -162,29 +128,7 @@ const ProfilePage = () => {
         
         {/* Member Information Section */}
         <div className="bg-white rounded-lg shadow p-6 mb-8">
-          <h2 className="text-xl font-bold text-green-800 mb-6">Member Information</h2>
-          
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
-            <div>
-              <Label htmlFor="firstName" className="text-gray-600">First Name</Label>
-              <Input
-                id="firstName"
-                value={firstName}
-                onChange={(e) => setFirstName(e.target.value)}
-                className="mt-1"
-              />
-            </div>
-            
-            <div>
-              <Label htmlFor="lastName" className="text-gray-600">Last Name</Label>
-              <Input
-                id="lastName"
-                value={lastName}
-                onChange={(e) => setLastName(e.target.value)}
-                className="mt-1"
-              />
-            </div>
-          </div>
+          <h2 className="text-xl font-bold text-blue-800 mb-6">Member Information</h2>
           
           <div className="mb-6">
             <Label htmlFor="email" className="text-gray-600">Email</Label>
@@ -199,14 +143,6 @@ const ProfilePage = () => {
           
           <div className="flex gap-4">
             <Button 
-              onClick={handleSaveProfile}
-              disabled={loading}
-              className="bg-green-700 hover:bg-green-800"
-            >
-              Save
-            </Button>
-            
-            <Button 
               variant="outline" 
               onClick={handleLogout}
             >
@@ -217,7 +153,7 @@ const ProfilePage = () => {
         
         {/* Change Password Section */}
         <div className="bg-white rounded-lg shadow p-6 mb-8">
-          <h2 className="text-xl font-bold text-green-800 mb-6">Change Password</h2>
+          <h2 className="text-xl font-bold text-blue-800 mb-6">Change Password</h2>
           
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
             <div className="relative">
@@ -264,7 +200,7 @@ const ProfilePage = () => {
           <Button 
             onClick={handleChangePassword}
             disabled={loading || !newPassword || !confirmPassword}
-            className="bg-green-700 hover:bg-green-800"
+            className="bg-blue-700 hover:bg-blue-800"
           >
             Save
           </Button>
@@ -272,7 +208,7 @@ const ProfilePage = () => {
         
         {/* Delete Account Section */}
         <div className="bg-white rounded-lg shadow p-6">
-          <h2 className="text-xl font-bold text-green-800 mb-6">Delete Account</h2>
+          <h2 className="text-xl font-bold text-blue-800 mb-6">Delete Account</h2>
           
           <p className="text-gray-700 mb-6">
             To permanently delete your JobStalker account and remove all your career data just click the button below.
