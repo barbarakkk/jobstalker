@@ -1,7 +1,7 @@
 import React from 'react';
 import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { useAuth } from '@/context/auth';
-import Logo from '@/components/Logo';
+import Logo from '@/components/layout/Logo';
 
 const DashboardNavbar = () => {
   const { user, signOut } = useAuth();
