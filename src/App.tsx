@@ -1,3 +1,4 @@
+
 import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
@@ -18,7 +19,7 @@ import JobNotes from "./pages/JobNotes";
 import Statistics from "./pages/Statistics";
 import Profile from "./pages/Profile";
 import ResumeBuilder from "./pages/ResumeBuilder";
-import JobMatcher from "./pages/JobMatcher";
+// Removed: import JobMatcher from "./pages/JobMatcher";
 
 const queryClient = new QueryClient({
   defaultOptions: {
