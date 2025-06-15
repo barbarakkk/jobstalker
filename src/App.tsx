@@ -70,9 +70,6 @@ const AuthenticatedApp = () => {
       <Route path="/auth/reset-password" element={<ResetPassword />} />
       <Route path="/auth/callback" element={<AuthCallback />} />
 
-      {/* New Job Matcher public page */}
-      <Route path="/job-matcher" element={<JobMatcher />} />
-
       {/* Redirect /dashboard to /jobs */}
       <Route path="/dashboard" element={<Navigate to="/jobs" replace />} />
       

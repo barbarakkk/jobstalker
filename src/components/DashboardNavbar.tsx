@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { useAuth } from '@/context/auth';
@@ -21,7 +20,6 @@ const DashboardNavbar = () => {
   const isStatisticsPage = location.pathname === '/statistics';
   const isResumeBuilderPage = location.pathname === '/resume-builder';
   const isProfilePage = location.pathname === '/profile';
-  const isJobMatcherPage = location.pathname === '/job-matcher';
 
   return (
     <nav className="bg-white/95 backdrop-blur-sm shadow-sm border-b border-gray-100 sticky top-0 z-50">
@@ -71,16 +69,6 @@ const DashboardNavbar = () => {
               }`}
             >
               AI Resume Builder
-            </Link>
-            <Link
-              to="/job-matcher"
-              className={`px-6 py-3 rounded-xl text-sm font-semibold transition-all duration-200 ${
-                isJobMatcherPage
-                  ? 'text-blue-700 bg-blue-50 shadow-sm'
-                  : 'text-gray-600 hover:text-gray-900 hover:bg-gray-50'
-              }`}
-            >
-              Job Matcher
             </Link>
           </div>
 
