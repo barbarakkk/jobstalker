@@ -1,4 +1,3 @@
-
 import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
@@ -19,6 +18,7 @@ import JobNotes from "./pages/JobNotes";
 import Statistics from "./pages/Statistics";
 import Profile from "./pages/Profile";
 import ResumeBuilder from "./pages/ResumeBuilder";
+import JobMatcher from "./pages/JobMatcher";
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -69,7 +69,10 @@ const AuthenticatedApp = () => {
       <Route path="/forgot-password" element={<ForgotPassword />} />
       <Route path="/auth/reset-password" element={<ResetPassword />} />
       <Route path="/auth/callback" element={<AuthCallback />} />
-      
+
+      {/* New Job Matcher public page */}
+      <Route path="/job-matcher" element={<JobMatcher />} />
+
       {/* Redirect /dashboard to /jobs */}
       <Route path="/dashboard" element={<Navigate to="/jobs" replace />} />
       
