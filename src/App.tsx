@@ -1,4 +1,3 @@
-
 import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
@@ -19,7 +18,7 @@ import JobNotes from "./pages/JobNotes";
 import Statistics from "./pages/Statistics";
 import Profile from "./pages/Profile";
 import ResumeBuilder from "./pages/ResumeBuilder";
-// Removed: import JobMatcher from "./pages/JobMatcher";
+import JobMatcher from "./pages/JobMatcher";
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -106,6 +105,16 @@ const AuthenticatedApp = () => {
             <ProtectedJobRoutes>
               <Statistics />
             </ProtectedJobRoutes>
+          </ProtectedRoute>
+        } 
+      />
+      
+      {/* Job Matcher Page */}
+      <Route 
+        path="/job-matcher" 
+        element={
+          <ProtectedRoute>
+            <JobMatcher />
           </ProtectedRoute>
         } 
       />

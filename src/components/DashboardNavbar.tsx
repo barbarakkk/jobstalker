@@ -1,3 +1,4 @@
+
 import React from 'react';
 import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { useAuth } from '@/context/auth';
@@ -19,6 +20,7 @@ const DashboardNavbar = () => {
   const isJobsPage = location.pathname === '/jobs';
   const isStatisticsPage = location.pathname === '/statistics';
   const isResumeBuilderPage = location.pathname === '/resume-builder';
+  const isJobMatcherPage = location.pathname === '/job-matcher';
   const isProfilePage = location.pathname === '/profile';
 
   return (
@@ -59,6 +61,16 @@ const DashboardNavbar = () => {
               }`}
             >
               Statistics
+            </Link>
+            <Link
+              to="/job-matcher"
+              className={`px-6 py-3 rounded-xl text-sm font-semibold transition-all duration-200 ${
+                isJobMatcherPage
+                  ? 'text-blue-700 bg-blue-50 shadow-sm'
+                  : 'text-gray-600 hover:text-gray-900 hover:bg-gray-50'
+              }`}
+            >
+              Job Matcher
             </Link>
             <Link
               to="/resume-builder"
