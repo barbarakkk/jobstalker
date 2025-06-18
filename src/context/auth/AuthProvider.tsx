@@ -1,4 +1,3 @@
-
 import React, { createContext, useEffect, useState } from "react";
 import { Session, User } from "@supabase/supabase-js";
 import { supabase } from "@/integrations/supabase/client";
@@ -89,7 +88,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       mounted = false;
       subscription.unsubscribe();
     };
-  }, [navigate, toast, hasInitialized]);
+  }, [navigate, toast]);
 
   const signIn = {
     email: signInWithEmail,
