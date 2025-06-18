@@ -23,12 +23,12 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [user, setUser] = useState<User | null>(null);
   const [session, setSession] = useState<Session | null>(null);
   const [isLoading, setIsLoading] = useState(true);
+  const [hasInitialized, setHasInitialized] = useState(false);
   const navigate = useNavigate();
   const { toast } = useToast();
 
   useEffect(() => {
     let mounted = true;
-    let isInitialLoad = true;
 
     // Set up auth state listener first
     const { data: { subscription } } = supabase.auth.onAuthStateChange(
@@ -40,26 +40,23 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         setSession(currentSession);
         setUser(currentSession?.user ?? null);
         
-        // Only redirect on explicit sign-in/sign-out events, not on initial session restoration
-        if (event === "SIGNED_IN" && currentSession && !isInitialLoad) {
-          console.log("User signed in successfully, navigating to jobs");
-          toast({
-            title: "Signed in successfully",
-            description: "Welcome back!",
-          });
-          navigate("/jobs");
-        } else if (event === "SIGNED_OUT") {
-          console.log("User signed out, navigating to login");
-          navigate("/login");
-        } else if (event === "TOKEN_REFRESHED") {
-          console.log("Token refreshed successfully");
-        } else if (event === "INITIAL_SESSION") {
-          console.log("Initial session detected, no redirect needed");
-        }
-        
-        // Mark that initial load is complete after first auth state change
-        if (isInitialLoad) {
-          isInitialLoad = false;
+        // Only redirect on explicit sign-in/sign-out events after initialization
+        if (hasInitialized) {
+          if (event === "SIGNED_IN" && currentSession) {
+            console.log("User signed in successfully, navigating to jobs");
+            toast({
+              title: "Signed in successfully",
+              description: "Welcome back!",
+            });
+            navigate("/jobs");
+          } else if (event === "SIGNED_OUT") {
+            console.log("User signed out, navigating to login");
+            navigate("/login");
+          } else if (event === "TOKEN_REFRESHED") {
+            console.log("Token refreshed successfully - no redirect");
+          }
+        } else {
+          console.log("Initial auth state change - no redirect");
         }
       }
     );
@@ -80,6 +77,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         
         setSession(currentSession);
         setUser(currentSession?.user ?? null);
+        setHasInitialized(true);
       } catch (error) {
         console.error("Error checking session:", error);
       } finally {
