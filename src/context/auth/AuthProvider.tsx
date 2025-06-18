@@ -23,6 +23,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [user, setUser] = useState<User | null>(null);
   const [session, setSession] = useState<Session | null>(null);
   const [isLoading, setIsLoading] = useState(true);
+  const [hasInitialized, setHasInitialized] = useState(false);
   const navigate = useNavigate();
   const { toast } = useToast();
 
@@ -39,7 +40,8 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         setSession(currentSession);
         setUser(currentSession?.user ?? null);
         
-        if (event === "SIGNED_IN" && currentSession) {
+        // Only redirect on actual sign-in events after initialization, not on session restoration
+        if (event === "SIGNED_IN" && currentSession && hasInitialized) {
           console.log("User signed in successfully, navigating to jobs");
           toast({
             title: "Signed in successfully",
@@ -71,6 +73,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         
         setSession(currentSession);
         setUser(currentSession?.user ?? null);
+        setHasInitialized(true);
       } catch (error) {
         console.error("Error checking session:", error);
       } finally {
@@ -86,7 +89,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       mounted = false;
       subscription.unsubscribe();
     };
-  }, [navigate, toast]);
+  }, [navigate, toast, hasInitialized]);
 
   const signIn = {
     email: signInWithEmail,
