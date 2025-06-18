@@ -2,7 +2,6 @@
 import React, { createContext, useEffect, useState } from "react";
 import { Session, User } from "@supabase/supabase-js";
 import { supabase } from "@/integrations/supabase/client";
-import { useNavigate } from "react-router-dom";
 import { useToast } from "@/hooks/use-toast";
 import { AuthContextType } from "./types";
 import { 
@@ -23,8 +22,6 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [user, setUser] = useState<User | null>(null);
   const [session, setSession] = useState<Session | null>(null);
   const [isLoading, setIsLoading] = useState(true);
-  const [hasInitialized, setHasInitialized] = useState(false);
-  const navigate = useNavigate();
   const { toast } = useToast();
 
   useEffect(() => {
@@ -40,23 +37,21 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         setSession(currentSession);
         setUser(currentSession?.user ?? null);
         
-        // Only redirect on explicit sign-in/sign-out events after initialization
-        if (hasInitialized) {
-          if (event === "SIGNED_IN" && currentSession) {
-            console.log("User signed in successfully, navigating to jobs");
-            toast({
-              title: "Signed in successfully",
-              description: "Welcome back!",
-            });
-            navigate("/jobs");
-          } else if (event === "SIGNED_OUT") {
-            console.log("User signed out, navigating to login");
-            navigate("/login");
-          } else if (event === "TOKEN_REFRESHED") {
-            console.log("Token refreshed successfully - no redirect");
-          }
-        } else {
-          console.log("Initial auth state change - no redirect");
+        // Only show toast messages for explicit user actions, no automatic redirects
+        if (event === "SIGNED_IN" && currentSession) {
+          console.log("User signed in successfully");
+          toast({
+            title: "Signed in successfully",
+            description: "Welcome back!",
+          });
+        } else if (event === "SIGNED_OUT") {
+          console.log("User signed out");
+          toast({
+            title: "Signed out",
+            description: "You have been signed out successfully.",
+          });
+        } else if (event === "TOKEN_REFRESHED") {
+          console.log("Token refreshed successfully");
         }
       }
     );
@@ -77,7 +72,6 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         
         setSession(currentSession);
         setUser(currentSession?.user ?? null);
-        setHasInitialized(true);
       } catch (error) {
         console.error("Error checking session:", error);
       } finally {
@@ -93,7 +87,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       mounted = false;
       subscription.unsubscribe();
     };
-  }, [navigate, toast]);
+  }, [toast]);
 
   const signIn = {
     email: signInWithEmail,
