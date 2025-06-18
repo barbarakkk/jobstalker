@@ -5,22 +5,65 @@ import DashboardNavbar from "@/components/DashboardNavbar";
 import { FileText, FilePlus, Loader2 } from "lucide-react";
 import ResumeInputSection from "@/components/resume/ResumeInputSection";
 import GeneratedResumeSection from "@/components/resume/GeneratedResumeSection";
+import { supabase } from "@/integrations/supabase/client";
+import { useToast } from "@/components/ui/use-toast";
 
 const ResumeBuilder: React.FC = () => {
   const [resumeText, setResumeText] = useState<string>("");
   const [jobText, setJobText] = useState<string>("");
   const [isGenerating, setIsGenerating] = useState(false);
   const [generatedResume, setGeneratedResume] = useState<string>("");
+  const { toast } = useToast();
 
   const handleGenerate = async () => {
+    if (!resumeText.trim() || !jobText.trim()) {
+      toast({
+        title: "Missing Information",
+        description: "Please provide both your resume and the job description.",
+        variant: "destructive",
+      });
+      return;
+    }
+
     setIsGenerating(true);
     setGeneratedResume("");
-    setTimeout(() => {
-      setGeneratedResume(
-        "✨ [Mock] Your new ATS-friendly resume, tailored to this job description, will appear here. (AI integration coming soon!)"
-      );
+
+    try {
+      console.log("Calling generateResume edge function...");
+      
+      const { data, error } = await supabase.functions.invoke('generateResume', {
+        body: {
+          resume: resumeText,
+          jobDescription: jobText,
+        },
+      });
+
+      if (error) {
+        console.error("Edge function error:", error);
+        throw error;
+      }
+
+      console.log("Edge function response:", data);
+
+      if (data?.generatedResume) {
+        setGeneratedResume(data.generatedResume);
+        toast({
+          title: "Resume Generated Successfully",
+          description: "Your ATS-optimized resume has been generated!",
+        });
+      } else {
+        throw new Error("No generated resume received from the API");
+      }
+    } catch (error: any) {
+      console.error("Error generating resume:", error);
+      toast({
+        title: "Generation Failed",
+        description: error.message || "Failed to generate resume. Please try again.",
+        variant: "destructive",
+      });
+    } finally {
       setIsGenerating(false);
-    }, 1800);
+    }
   };
 
   const canGenerate = !!resumeText && !!jobText && !isGenerating;
