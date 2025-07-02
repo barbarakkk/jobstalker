@@ -24,20 +24,49 @@ const JobListItem: React.FC<JobListItemProps> = ({
 }) => {
   const navigate = useNavigate();
   const [isEditDialogOpen, setIsEditDialogOpen] = useState(false);
+  const [isHovering, setIsHovering] = useState(false);
+  const [hoverRating, setHoverRating] = useState(0);
 
-  // Render stars based on excitement (1-5)
+  // Handle star click to set rating
+  const handleStarClick = (rating: number) => {
+    const updatedJob: Job = {
+      ...job,
+      excitement: rating
+    };
+    onUpdate(updatedJob);
+  };
+
+  // Render interactive stars
   const renderExcitement = () => {
-    if (!job.excitement) return null;
-    
     return (
-      <div className="flex">
-        {Array.from({ length: 5 }).map((_, i) => (
-          <StarIcon 
-            key={i} 
-            size={16} 
-            className={i < job.excitement! ? "text-yellow-500 fill-yellow-500" : "text-gray-300"}
-          />
-        ))}
+      <div 
+        className="flex gap-1"
+        onMouseEnter={() => setIsHovering(true)}
+        onMouseLeave={() => {
+          setIsHovering(false);
+          setHoverRating(0);
+        }}
+      >
+        {Array.from({ length: 5 }).map((_, i) => {
+          const starIndex = i + 1;
+          const currentRating = job.excitement || 0;
+          const displayRating = isHovering ? hoverRating : currentRating;
+          const isFilled = starIndex <= displayRating;
+          
+          return (
+            <StarIcon 
+              key={i} 
+              size={16} 
+              className={`cursor-pointer transition-colors duration-150 ${
+                isFilled 
+                  ? "text-yellow-500 fill-yellow-500" 
+                  : "text-gray-300 hover:text-yellow-400"
+              }`}
+              onClick={() => handleStarClick(starIndex)}
+              onMouseEnter={() => setHoverRating(starIndex)}
+            />
+          );
+        })}
       </div>
     );
   };
