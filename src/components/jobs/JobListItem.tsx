@@ -168,7 +168,6 @@ const JobListItem: React.FC<JobListItemProps> = ({
           {renderExcitement()}
         </div>
 
-        {/* Notes button column */}
         <div className="col-span-1">
           <Button
             variant="outline"
