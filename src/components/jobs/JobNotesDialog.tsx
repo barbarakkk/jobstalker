@@ -4,7 +4,6 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from '
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import { Textarea } from '@/components/ui/textarea';
 import { Calendar } from '@/components/ui/calendar';
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
 import { CalendarIcon, Trash2 } from 'lucide-react';
@@ -30,7 +29,6 @@ interface JobFormData {
   dateApplied?: string;
   deadline?: string;
   jobUrl?: string;
-  notes?: string;
   excitement?: number;
 }
 
@@ -41,7 +39,7 @@ const JobNotesDialog: React.FC<JobNotesDialogProps> = ({
   onUpdateJob,
   onDeleteJob
 }) => {
-  const { register, handleSubmit, formState: { errors }, reset, setValue, watch } = useForm<JobFormData>({
+  const { register, handleSubmit, formState: { errors }, reset, setValue } = useForm<JobFormData>({
     defaultValues: {
       title: job.title,
       company: job.company,
@@ -51,7 +49,6 @@ const JobNotesDialog: React.FC<JobNotesDialogProps> = ({
       dateApplied: job.dateApplied,
       deadline: job.deadline,
       jobUrl: job.jobUrl,
-      notes: job.notes,
       excitement: job.excitement
     }
   });
@@ -75,7 +72,6 @@ const JobNotesDialog: React.FC<JobNotesDialogProps> = ({
         dateApplied: job.dateApplied,
         deadline: job.deadline,
         jobUrl: job.jobUrl,
-        notes: job.notes,
         excitement: job.excitement
       });
 
@@ -123,7 +119,7 @@ const JobNotesDialog: React.FC<JobNotesDialogProps> = ({
     <Dialog open={isOpen} onOpenChange={onClose}>
       <DialogContent className="sm:max-w-[650px] max-h-[90vh] overflow-y-auto">
         <DialogHeader>
-          <DialogTitle>Job Notes</DialogTitle>
+          <DialogTitle>Edit Job Details</DialogTitle>
         </DialogHeader>
         
         <form onSubmit={handleSubmit(onSubmit)} className="space-y-4 py-4">
@@ -264,16 +260,6 @@ const JobNotesDialog: React.FC<JobNotesDialogProps> = ({
                   </PopoverContent>
                 </Popover>
               </div>
-            </div>
-            
-            <div className="space-y-2">
-              <Label htmlFor="notes">Notes</Label>
-              <Textarea
-                id="notes"
-                {...register('notes')}
-                className="min-h-[200px]"
-                placeholder="Add detailed notes about this job application..."
-              />
             </div>
             
             {job.dateSaved && (

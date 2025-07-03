@@ -42,7 +42,6 @@ export const useJobsActions = (
           date_applied: dateAppliedIso,
           deadline: deadlineIso,
           excitement: job.excitement || 0,
-          notes: job.notes || null,
           user_id: user.id // Add the user's ID from the auth context
         })
         .select();
@@ -69,8 +68,7 @@ export const useJobsActions = (
         dateSaved: new Date(data[0].date_saved).toLocaleDateString(),
         dateApplied: data[0].date_applied ? new Date(data[0].date_applied).toLocaleDateString() : undefined,
         deadline: data[0].deadline ? new Date(data[0].deadline).toLocaleDateString() : undefined,
-        excitement: data[0].excitement || 0,
-        notes: data[0].notes || undefined
+        excitement: data[0].excitement || 0
       };
 
       setJobs([newJob, ...jobs]);
@@ -117,7 +115,6 @@ export const useJobsActions = (
           date_applied: dateAppliedIso,
           deadline: deadlineIso,
           excitement: updatedJob.excitement || 0,
-          notes: updatedJob.notes || null,
           updated_at: new Date().toISOString()
         })
         .eq('id', updatedJob.id);

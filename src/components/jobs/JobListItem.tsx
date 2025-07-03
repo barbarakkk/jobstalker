@@ -5,6 +5,7 @@ import { StarIcon } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from '@/components/ui/dropdown-menu';
 import { type Job } from '@/types/job';
+import { useNotes } from '@/context/notes/NotesContext';
 import EditJobDialog from './EditJobDialog';
 
 interface JobListItemProps {
@@ -23,9 +24,12 @@ const JobListItem: React.FC<JobListItemProps> = ({
   onDelete
 }) => {
   const navigate = useNavigate();
+  const { getJobNotes } = useNotes();
   const [isEditDialogOpen, setIsEditDialogOpen] = useState(false);
   const [isHovering, setIsHovering] = useState(false);
   const [hoverRating, setHoverRating] = useState(0);
+
+  const jobNotes = getJobNotes(job.id);
 
   // Handle star click to set rating
   const handleStarClick = (rating: number) => {
@@ -175,7 +179,7 @@ const JobListItem: React.FC<JobListItemProps> = ({
             className="text-xs px-3 py-1 h-8"
             onClick={handleNavigateToNotes}
           >
-            Notes
+            Notes ({jobNotes.length})
           </Button>
         </div>
       </div>

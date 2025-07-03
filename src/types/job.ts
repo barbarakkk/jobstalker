@@ -29,5 +29,4 @@ export interface Job {
   dateApplied?: string;
   deadline?: string;
   excitement?: number; // 1-5 stars
-  notes?: string;
 }

@@ -45,8 +45,7 @@ export const useJobsFetching = (userId: string | undefined) => {
           dateSaved: new Date(job.date_saved).toLocaleDateString(),
           dateApplied: job.date_applied ? new Date(job.date_applied).toLocaleDateString() : undefined,
           deadline: job.deadline ? new Date(job.deadline).toLocaleDateString() : undefined,
-          excitement: job.excitement || 0,
-          notes: job.notes || undefined
+          excitement: job.excitement || 0
         }));
 
         setJobs(transformedJobs);
