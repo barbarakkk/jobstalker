@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
@@ -24,7 +25,7 @@ const JobNotes: React.FC = () => {
   const { toast } = useToast();
 
   const job = jobs.find(j => j.id === jobId);
-  const jobNotes = notes.filter(note => note.jobId === jobId);
+  const jobNotes = notes.filter(note => note.job_id === jobId);
 
   const [formData, setFormData] = useState({
     title: '',
@@ -136,9 +137,10 @@ const JobNotes: React.FC = () => {
     const newNote: Omit<Note, 'id'> = {
       title: newNoteTitle,
       content: newNoteContent,
-      jobId: jobId!,
-      createdAt: new Date().toISOString(),
-      updatedAt: new Date().toISOString()
+      job_id: jobId!,
+      user_id: '', // This will be set by the context
+      created_at: new Date().toISOString(),
+      updated_at: new Date().toISOString()
     };
 
     addNote(newNote);
@@ -163,7 +165,7 @@ const JobNotes: React.FC = () => {
       ...editingNote,
       title: editNoteTitle,
       content: editNoteContent,
-      updatedAt: new Date().toISOString()
+      updated_at: new Date().toISOString()
     };
 
     updateNote(updatedNote);
@@ -472,9 +474,9 @@ const JobNotes: React.FC = () => {
                             <p className="text-gray-600 text-sm whitespace-pre-wrap">{note.content}</p>
                           )}
                           <p className="text-xs text-gray-400 mt-2">
-                            Created: {new Date(note.createdAt).toLocaleDateString()}
-                            {note.updatedAt !== note.createdAt && (
-                              <span> • Updated: {new Date(note.updatedAt).toLocaleDateString()}</span>
+                            Created: {new Date(note.created_at).toLocaleDateString()}
+                            {note.updated_at !== note.created_at && (
+                              <span> • Updated: {new Date(note.updated_at).toLocaleDateString()}</span>
                             )}
                           </p>
                         </div>
