@@ -1,3 +1,4 @@
+
 import React from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import { Toaster } from '@/components/ui/toaster';
@@ -10,6 +11,7 @@ import Settings from '@/pages/Settings';
 import Login from '@/pages/Login';
 import SignUp from '@/pages/SignUp';
 import AuthCallback from '@/pages/AuthCallback';
+import Index from '@/pages/Index';
 import { useAuth } from '@/context/auth';
 import { Navigate } from 'react-router-dom';
 
@@ -21,11 +23,11 @@ function App() {
           <Router>
             <div className="min-h-screen bg-gray-50">
               <Routes>
+                <Route path="/" element={<Index />} />
                 <Route path="/login" element={<Login />} />
                 <Route path="/signup" element={<SignUp />} />
                 <Route path="/auth/callback" element={<AuthCallback />} />
                 <Route path="/auth" element={<Navigate to="/login" replace />} />
-                <Route path="/" element={<ProtectedRoute><Dashboard /></ProtectedRoute>} />
                 <Route path="/dashboard" element={<ProtectedRoute><Dashboard /></ProtectedRoute>} />
                 <Route path="/jobs" element={<ProtectedRoute><JobsPage /></ProtectedRoute>} />
                 <Route path="/settings" element={<ProtectedRoute><Settings /></ProtectedRoute>} />
