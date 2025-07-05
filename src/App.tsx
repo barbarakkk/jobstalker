@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import { Toaster } from '@/components/ui/toaster';
@@ -7,8 +6,6 @@ import { JobsProvider } from '@/context/jobs';
 import { NotesProvider } from '@/context/notes/NotesContext';
 import Dashboard from '@/pages/Dashboard';
 import JobsPage from '@/pages/Jobs';
-import JobNotes from '@/pages/JobNotes';
-import Notes from '@/pages/Notes';
 import Settings from '@/pages/Settings';
 import Login from '@/pages/Login';
 import SignUp from '@/pages/SignUp';
@@ -31,8 +28,6 @@ function App() {
                 <Route path="/" element={<ProtectedRoute><Dashboard /></ProtectedRoute>} />
                 <Route path="/dashboard" element={<ProtectedRoute><Dashboard /></ProtectedRoute>} />
                 <Route path="/jobs" element={<ProtectedRoute><JobsPage /></ProtectedRoute>} />
-                <Route path="/jobs/:jobId/notes" element={<ProtectedRoute><JobNotes /></ProtectedRoute>} />
-                <Route path="/notes" element={<ProtectedRoute><Notes /></ProtectedRoute>} />
                 <Route path="/settings" element={<ProtectedRoute><Settings /></ProtectedRoute>} />
               </Routes>
             </div>
