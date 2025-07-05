@@ -15,10 +15,10 @@ const JobsPage: React.FC = () => {
   const { addJob, jobs, isLoading } = useJobs();
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-blue-50/30">
+    <div className="min-h-screen bg-gradient-to-br from-slate-50 to-blue-50/30">
       <JobsNavbar />
       
-      <main className="container mx-auto py-6 px-6 pt-24">
+      <main className="container mx-auto py-8 px-6 pt-24 space-y-8">
         <JobsStatusSummary />
 
         <JobsControlBar
@@ -29,17 +29,17 @@ const JobsPage: React.FC = () => {
 
         {/* Empty state */}
         {!isLoading && jobs.length === 0 && (
-          <div className="bg-white/90 backdrop-blur-sm rounded-2xl shadow-lg shadow-gray-900/5 p-12 text-center border border-gray-200/60">
-            <div className="mb-6">
-              <div className="mx-auto w-16 h-16 bg-gradient-to-r from-blue-600 to-blue-700 rounded-2xl flex items-center justify-center shadow-lg shadow-blue-600/25 mb-4">
-                <Briefcase className="h-8 w-8 text-white" />
+          <div className="bg-white rounded-3xl shadow-sm border border-gray-100 p-16 text-center">
+            <div className="mb-8">
+              <div className="mx-auto w-20 h-20 bg-gradient-to-br from-blue-500 to-blue-600 rounded-2xl flex items-center justify-center shadow-lg shadow-blue-500/20 mb-6">
+                <Briefcase className="h-10 w-10 text-white" />
               </div>
             </div>
-            <h3 className="text-xl font-bold text-gray-900 mb-3">No job applications yet</h3>
-            <p className="text-gray-600 mb-6 font-medium">Start tracking your job applications and take control of your career journey.</p>
+            <h3 className="text-2xl font-bold text-gray-900 mb-4">No job applications yet</h3>
+            <p className="text-gray-500 mb-8 max-w-md mx-auto">Start tracking your job applications and take control of your career journey.</p>
             <Button 
               onClick={() => setIsAddJobDialogOpen(true)} 
-              className="bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 text-white font-bold px-8 py-3 rounded-xl shadow-lg shadow-blue-600/25 hover:shadow-xl hover:shadow-blue-600/30 transition-all duration-300 flex items-center gap-2 mx-auto"
+              className="bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 text-white font-semibold px-8 py-3 rounded-xl shadow-lg shadow-blue-600/25 hover:shadow-xl hover:shadow-blue-600/30 transition-all duration-300 flex items-center gap-2 mx-auto"
             >
               <Plus size={18} />
               Add Your First Job
