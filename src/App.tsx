@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import { Toaster } from '@/components/ui/toaster';
@@ -7,6 +6,9 @@ import { JobsProvider } from '@/context/jobs';
 import { NotesProvider } from '@/context/notes/NotesContext';
 import Dashboard from '@/pages/Dashboard';
 import JobsPage from '@/pages/Jobs';
+import Statistics from '@/pages/Statistics';
+import JobMatcher from '@/pages/JobMatcher';
+import ResumeBuilder from '@/pages/ResumeBuilder';
 import Settings from '@/pages/Settings';
 import Login from '@/pages/Login';
 import SignUp from '@/pages/SignUp';
@@ -30,6 +32,9 @@ function App() {
                 <Route path="/auth" element={<Navigate to="/login" replace />} />
                 <Route path="/dashboard" element={<ProtectedRoute><Dashboard /></ProtectedRoute>} />
                 <Route path="/jobs" element={<ProtectedRoute><JobsPage /></ProtectedRoute>} />
+                <Route path="/statistics" element={<ProtectedRoute><Statistics /></ProtectedRoute>} />
+                <Route path="/job-matcher" element={<ProtectedRoute><JobMatcher /></ProtectedRoute>} />
+                <Route path="/resume-builder" element={<ProtectedRoute><ResumeBuilder /></ProtectedRoute>} />
                 <Route path="/settings" element={<ProtectedRoute><Settings /></ProtectedRoute>} />
               </Routes>
             </div>
