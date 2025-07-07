@@ -48,8 +48,8 @@ const AuthCallback = () => {
             description: "You have been signed in successfully.",
           });
           
-          // Navigate to dashboard
-          navigate('/dashboard', { replace: true });
+          // Navigate to jobs page instead of dashboard
+          navigate('/jobs', { replace: true });
         } else {
           console.log("Auth callback completed but no session found");
           
@@ -58,7 +58,7 @@ const AuthCallback = () => {
             const { data: retryData } = await supabase.auth.getSession();
             if (retryData?.session) {
               console.log("Session found on retry");
-              navigate('/dashboard', { replace: true });
+              navigate('/jobs', { replace: true });
             } else {
               setError("Authentication completed but no session was created. Please try signing in again.");
               setTimeout(() => {
