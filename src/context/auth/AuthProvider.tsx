@@ -44,6 +44,8 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
             title: "Signed in successfully",
             description: "Welcome back!",
           });
+          // Redirect to jobs page after successful login
+          window.location.href = "/jobs";
         } else if (event === "SIGNED_OUT") {
           console.log("User signed out");
           toast({

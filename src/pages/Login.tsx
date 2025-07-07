@@ -23,9 +23,9 @@ const Login = () => {
   const navigate = useNavigate();
   
   useEffect(() => {
-    // If user is already logged in, redirect to dashboard
+    // If user is already logged in, redirect to jobs page
     if (user) {
-      navigate('/dashboard');
+      navigate('/jobs');
     }
     
     // Check for error parameter in URL

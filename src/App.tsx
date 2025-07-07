@@ -1,10 +1,10 @@
+
 import React from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import { Toaster } from '@/components/ui/toaster';
 import { AuthProvider } from '@/context/auth';
 import { JobsProvider } from '@/context/jobs';
 import { NotesProvider } from '@/context/notes/NotesContext';
-import Dashboard from '@/pages/Dashboard';
 import JobsPage from '@/pages/Jobs';
 import Statistics from '@/pages/Statistics';
 import JobMatcher from '@/pages/JobMatcher';
@@ -30,7 +30,6 @@ function App() {
                 <Route path="/signup" element={<SignUp />} />
                 <Route path="/auth/callback" element={<AuthCallback />} />
                 <Route path="/auth" element={<Navigate to="/login" replace />} />
-                <Route path="/dashboard" element={<ProtectedRoute><Dashboard /></ProtectedRoute>} />
                 <Route path="/jobs" element={<ProtectedRoute><JobsPage /></ProtectedRoute>} />
                 <Route path="/statistics" element={<ProtectedRoute><Statistics /></ProtectedRoute>} />
                 <Route path="/job-matcher" element={<ProtectedRoute><JobMatcher /></ProtectedRoute>} />
