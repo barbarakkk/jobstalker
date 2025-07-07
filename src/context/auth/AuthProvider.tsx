@@ -37,15 +37,13 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         setSession(currentSession);
         setUser(currentSession?.user ?? null);
         
-        // Only show toast messages for explicit user actions, no automatic redirects
+        // Only show toast messages for explicit user actions
         if (event === "SIGNED_IN" && currentSession) {
           console.log("User signed in successfully");
           toast({
             title: "Signed in successfully",
             description: "Welcome back!",
           });
-          // Redirect to jobs page after successful login
-          window.location.href = "/jobs";
         } else if (event === "SIGNED_OUT") {
           console.log("User signed out");
           toast({
