@@ -9,7 +9,7 @@ import JobsPage from '@/pages/Jobs';
 import Statistics from '@/pages/Statistics';
 import JobMatcher from '@/pages/JobMatcher';
 import ResumeBuilder from '@/pages/ResumeBuilder';
-import Settings from '@/pages/Settings';
+import Profile from '@/pages/Profile';
 import Login from '@/pages/Login';
 import SignUp from '@/pages/SignUp';
 import AuthCallback from '@/pages/AuthCallback';
@@ -82,10 +82,10 @@ function App() {
                   } 
                 />
                 <Route 
-                  path="/settings" 
+                  path="/profile" 
                   element={
                     <ProtectedRoute>
-                      <Settings />
+                      <Profile />
                     </ProtectedRoute>
                   } 
                 />

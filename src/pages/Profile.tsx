@@ -11,7 +11,7 @@ import { useToast } from '@/hooks/use-toast';
 import { supabase } from '@/integrations/supabase/client';
 import { Eye, EyeOff } from 'lucide-react';
 
-const ProfilePage = () => {
+const Profile = () => {
   const { user, signOut, deleteAccount } = useAuth();
   const navigate = useNavigate();
   const { toast } = useToast();
@@ -242,4 +242,4 @@ const ProfilePage = () => {
   );
 };
 
-export default ProfilePage;
+export default Profile;
