@@ -10,6 +10,7 @@ import Statistics from '@/pages/Statistics';
 import JobMatcher from '@/pages/JobMatcher';
 import ResumeBuilder from '@/pages/ResumeBuilder';
 import Profile from '@/pages/Profile';
+import Notes from '@/pages/Notes';
 import Login from '@/pages/Login';
 import SignUp from '@/pages/SignUp';
 import AuthCallback from '@/pages/AuthCallback';
@@ -54,6 +55,14 @@ function App() {
                   element={
                     <ProtectedRoute>
                       <JobsPage />
+                    </ProtectedRoute>
+                  } 
+                />
+                <Route 
+                  path="/notes" 
+                  element={
+                    <ProtectedRoute>
+                      <Notes />
                     </ProtectedRoute>
                   } 
                 />
