@@ -18,6 +18,7 @@ const DashboardNavbar = () => {
   };
 
   const isJobsPage = location.pathname === '/jobs';
+  const isNotesPage = location.pathname === '/notes';
   const isStatisticsPage = location.pathname === '/statistics';
   const isResumeBuilderPage = location.pathname === '/resume-builder';
   const isJobMatcherPage = location.pathname === '/job-matcher';
@@ -51,6 +52,16 @@ const DashboardNavbar = () => {
               }`}
             >
               Jobs
+            </Link>
+            <Link
+              to="/notes"
+              className={`px-6 py-3 rounded-xl text-sm font-semibold transition-all duration-200 ${
+                isNotesPage
+                  ? 'text-blue-700 bg-blue-50 shadow-sm'
+                  : 'text-gray-600 hover:text-gray-900 hover:bg-gray-50'
+              }`}
+            >
+              Notes
             </Link>
             <Link
               to="/statistics"
