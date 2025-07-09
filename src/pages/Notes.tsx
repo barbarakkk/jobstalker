@@ -10,7 +10,7 @@ import { Label } from '@/components/ui/label';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import JobsNavbar from '@/components/DashboardNavbar';
 import { useNotes } from '@/context/notes/NotesContext';
-import { useJobs } from '@/context/jobs/JobsContext';
+import { useJobs } from '@/context/jobs';
 import { useAuth } from '@/context/auth';
 import { Note } from '@/types/note';
 
@@ -27,7 +27,6 @@ const NotesPage: React.FC = () => {
     job_id: ''
   });
 
-  // Debug logging
   console.log('NotesPage render - user:', user);
   console.log('NotesPage render - notes:', notes);
   console.log('NotesPage render - isLoading:', isLoading);
