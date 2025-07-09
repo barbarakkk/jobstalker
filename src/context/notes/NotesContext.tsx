@@ -22,21 +22,33 @@ export const NotesProvider = ({ children }: { children: React.ReactNode }) => {
   const { toast } = useToast();
   const { user } = useAuth();
 
+  // Debug logging
+  console.log('NotesProvider render - user:', user);
+  console.log('NotesProvider render - notes:', notes);
+  console.log('NotesProvider render - isLoading:', isLoading);
+
   // Fetch notes from Supabase
   useEffect(() => {
     const fetchNotes = async () => {
+      console.log('fetchNotes called - user:', user);
+      
       if (!user) {
+        console.log('No user, clearing notes and setting loading false');
         setNotes([]);
         setIsLoading(false);
         return;
       }
 
       try {
+        console.log('Fetching notes for user:', user.id);
         const { data, error } = await supabase
           .from('notes')
           .select('*')
           .eq('user_id', user.id)
           .order('created_at', { ascending: false });
+
+        console.log('Supabase response - data:', data);
+        console.log('Supabase response - error:', error);
 
         if (error) {
           console.error('Error fetching notes:', error);
@@ -48,6 +60,7 @@ export const NotesProvider = ({ children }: { children: React.ReactNode }) => {
           return;
         }
 
+        console.log('Setting notes:', data || []);
         setNotes(data || []);
       } catch (error) {
         console.error('Unexpected error:', error);
@@ -57,6 +70,7 @@ export const NotesProvider = ({ children }: { children: React.ReactNode }) => {
           variant: 'destructive'
         });
       } finally {
+        console.log('Setting loading to false');
         setIsLoading(false);
       }
     };
@@ -65,7 +79,10 @@ export const NotesProvider = ({ children }: { children: React.ReactNode }) => {
   }, [user, toast]);
 
   const addNote = async (noteData: Omit<Note, 'id' | 'user_id' | 'created_at' | 'updated_at'>) => {
+    console.log('addNote called with:', noteData);
+    
     if (!user) {
+      console.log('No user for addNote');
       toast({
         title: 'Authentication required',
         description: 'You must be logged in to add notes',
@@ -75,6 +92,7 @@ export const NotesProvider = ({ children }: { children: React.ReactNode }) => {
     }
 
     try {
+      console.log('Inserting note into database');
       const { data, error } = await supabase
         .from('notes')
         .insert({
@@ -86,6 +104,9 @@ export const NotesProvider = ({ children }: { children: React.ReactNode }) => {
         .select()
         .single();
 
+      console.log('Insert response - data:', data);
+      console.log('Insert response - error:', error);
+
       if (error) {
         console.error('Error adding note:', error);
         toast({
@@ -96,6 +117,7 @@ export const NotesProvider = ({ children }: { children: React.ReactNode }) => {
         return;
       }
 
+      console.log('Adding note to local state');
       setNotes([data, ...notes]);
       toast({
         title: 'Note added',
@@ -112,7 +134,10 @@ export const NotesProvider = ({ children }: { children: React.ReactNode }) => {
   };
 
   const updateNote = async (updatedNote: Note) => {
+    console.log('updateNote called with:', updatedNote);
+    
     if (!user) {
+      console.log('No user for updateNote');
       toast({
         title: 'Authentication required',
         description: 'You must be logged in to update notes',
@@ -122,6 +147,7 @@ export const NotesProvider = ({ children }: { children: React.ReactNode }) => {
     }
 
     try {
+      console.log('Updating note in database');
       const { error } = await supabase
         .from('notes')
         .update({
@@ -131,6 +157,8 @@ export const NotesProvider = ({ children }: { children: React.ReactNode }) => {
           updated_at: new Date().toISOString()
         })
         .eq('id', updatedNote.id);
+
+      console.log('Update response - error:', error);
 
       if (error) {
         console.error('Error updating note:', error);
@@ -142,6 +170,7 @@ export const NotesProvider = ({ children }: { children: React.ReactNode }) => {
         return;
       }
 
+      console.log('Updating note in local state');
       setNotes(notes.map(note => note.id === updatedNote.id ? updatedNote : note));
       toast({
         title: 'Note updated',
@@ -158,7 +187,10 @@ export const NotesProvider = ({ children }: { children: React.ReactNode }) => {
   };
 
   const deleteNote = async (noteId: string) => {
+    console.log('deleteNote called with:', noteId);
+    
     if (!user) {
+      console.log('No user for deleteNote');
       toast({
         title: 'Authentication required',
         description: 'You must be logged in to delete notes',
@@ -168,10 +200,13 @@ export const NotesProvider = ({ children }: { children: React.ReactNode }) => {
     }
 
     try {
+      console.log('Deleting note from database');
       const { error } = await supabase
         .from('notes')
         .delete()
         .eq('id', noteId);
+
+      console.log('Delete response - error:', error);
 
       if (error) {
         console.error('Error deleting note:', error);
@@ -183,6 +218,7 @@ export const NotesProvider = ({ children }: { children: React.ReactNode }) => {
         return;
       }
 
+      console.log('Removing note from local state');
       setNotes(notes.filter(note => note.id !== noteId));
       toast({
         title: 'Note deleted',

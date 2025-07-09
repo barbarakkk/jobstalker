@@ -11,9 +11,11 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import JobsNavbar from '@/components/DashboardNavbar';
 import { useNotes } from '@/context/notes/NotesContext';
 import { useJobs } from '@/context/jobs/JobsContext';
+import { useAuth } from '@/context/auth';
 import { Note } from '@/types/note';
 
 const NotesPage: React.FC = () => {
+  const { user } = useAuth();
   const { notes, isLoading, addNote, updateNote, deleteNote } = useNotes();
   const { jobs } = useJobs();
   const [isAddDialogOpen, setIsAddDialogOpen] = useState(false);
@@ -25,9 +27,16 @@ const NotesPage: React.FC = () => {
     job_id: ''
   });
 
+  // Debug logging
+  console.log('NotesPage render - user:', user);
+  console.log('NotesPage render - notes:', notes);
+  console.log('NotesPage render - isLoading:', isLoading);
+  console.log('NotesPage render - jobs:', jobs);
+
   const handleAddNote = async () => {
     if (!newNote.title.trim()) return;
 
+    console.log('Adding note:', newNote);
     await addNote({
       title: newNote.title,
       content: newNote.content || undefined,
@@ -41,6 +50,7 @@ const NotesPage: React.FC = () => {
   const handleEditNote = async () => {
     if (!editingNote || !editingNote.title.trim()) return;
 
+    console.log('Updating note:', editingNote);
     await updateNote(editingNote);
     setIsEditDialogOpen(false);
     setEditingNote(null);
@@ -48,6 +58,7 @@ const NotesPage: React.FC = () => {
 
   const handleDeleteNote = async (noteId: string) => {
     if (window.confirm('Are you sure you want to delete this note?')) {
+      console.log('Deleting note:', noteId);
       await deleteNote(noteId);
     }
   };
@@ -66,6 +77,21 @@ const NotesPage: React.FC = () => {
       minute: '2-digit'
     });
   };
+
+  // Show authentication required if no user
+  if (!user) {
+    return (
+      <div className="min-h-screen bg-gradient-to-br from-slate-50 to-blue-50/30">
+        <JobsNavbar />
+        <div className="container mx-auto py-24 px-6">
+          <div className="bg-white rounded-3xl shadow-sm border border-gray-100 p-16 text-center">
+            <h3 className="text-2xl font-bold text-gray-900 mb-4">Authentication Required</h3>
+            <p className="text-gray-500 mb-8">Please log in to view your notes.</p>
+          </div>
+        </div>
+      </div>
+    );
+  }
 
   if (isLoading) {
     return (
@@ -93,6 +119,7 @@ const NotesPage: React.FC = () => {
           <div>
             <h1 className="text-3xl font-bold text-gray-900 mb-2">My Notes</h1>
             <p className="text-gray-600">Keep track of your thoughts and job-related notes</p>
+            <p className="text-sm text-gray-400 mt-1">Found {notes.length} notes</p>
           </div>
           
           <Dialog open={isAddDialogOpen} onOpenChange={setIsAddDialogOpen}>
