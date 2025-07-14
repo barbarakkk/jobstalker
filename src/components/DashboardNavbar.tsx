@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { useAuth } from '@/context/auth';
@@ -52,16 +51,6 @@ const DashboardNavbar = () => {
               }`}
             >
               Jobs
-            </Link>
-            <Link
-              to="/notes"
-              className={`px-6 py-3 rounded-xl text-sm font-semibold transition-all duration-200 ${
-                isNotesPage
-                  ? 'text-blue-700 bg-blue-50 shadow-sm'
-                  : 'text-gray-600 hover:text-gray-900 hover:bg-gray-50'
-              }`}
-            >
-              Notes
             </Link>
             <Link
               to="/statistics"
