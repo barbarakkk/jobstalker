@@ -17,6 +17,19 @@ const ResetPassword = () => {
   const { toast } = useToast();
   const navigate = useNavigate();
 
+  console.log("ResetPassword render", { isLoading, error, sessionRestored, hash: window.location.hash });
+
+  if (window.location.hash) {
+    const hashParams = new URLSearchParams(window.location.hash.substring(1));
+    const urlError = hashParams.get('error') || hashParams.get('error_code');
+    const errorDescription = hashParams.get('error_description');
+    if (urlError || errorDescription) {
+      return <div style={{ color: 'red', padding: 40, fontSize: 24 }}>
+        ERROR: {errorDescription || urlError}
+      </div>;
+    }
+  }
+
   // Handle Supabase password reset hash fragment and error messages
   useEffect(() => {
     const handleSessionFromHash = async () => {
