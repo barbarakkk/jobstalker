@@ -17,8 +17,10 @@ const ResetPassword = () => {
   const { toast } = useToast();
   const navigate = useNavigate();
 
+  // Debug print to see state on every render
   console.log("ResetPassword render", { isLoading, error, sessionRestored, hash: window.location.hash });
 
+  // Force render error if present in hash
   if (window.location.hash) {
     const hashParams = new URLSearchParams(window.location.hash.substring(1));
     const urlError = hashParams.get('error') || hashParams.get('error_code');
@@ -26,6 +28,10 @@ const ResetPassword = () => {
     if (urlError || errorDescription) {
       return <div style={{ color: 'red', padding: 40, fontSize: 24 }}>
         ERROR: {errorDescription || urlError}
+        <div style={{ marginTop: 20 }}>
+          <Button onClick={() => navigate('/forgot-password')}>Request New Reset Link</Button>
+          <Button onClick={() => navigate('/login')} style={{ marginLeft: 10 }}>Return to Login</Button>
+        </div>
       </div>;
     }
   }
