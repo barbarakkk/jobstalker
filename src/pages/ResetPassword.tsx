@@ -17,11 +17,19 @@ const ResetPassword = () => {
   const { toast } = useToast();
   const navigate = useNavigate();
 
-  // Handle Supabase password reset hash fragment
+  // Handle Supabase password reset hash fragment and error messages
   useEffect(() => {
     const handleSessionFromHash = async () => {
-      // Only run if there is a hash fragment
+      // Check for error in hash fragment
       if (window.location.hash) {
+        const hashParams = new URLSearchParams(window.location.hash.substring(1));
+        const urlError = hashParams.get('error') || hashParams.get('error_code');
+        const errorDescription = hashParams.get('error_description');
+        if (urlError || errorDescription) {
+          setError(errorDescription || urlError || 'Invalid or expired password reset link.');
+          setIsLoading(false);
+          return;
+        }
         setIsLoading(true);
         // For Supabase v2, use exchangeCodeForSession
         const { error } = await supabase.auth.exchangeCodeForSession(window.location.hash.substring(1));
@@ -107,11 +115,17 @@ const ResetPassword = () => {
         <div className="flex flex-1 items-center justify-center p-6">
           <div className="w-full max-w-md">
             <div className="text-center">
-              <h1 className="text-2xl font-bold">Password Reset Link Expired</h1>
-              <p className="mt-2 text-gray-600">Your password reset link has expired or is invalid.</p>
+              <h1 className="text-2xl font-bold">Password Reset Error</h1>
+              <p className="mt-2 text-gray-600">{error}</p>
+              <Button
+                onClick={() => navigate("/forgot-password")}
+                className="mt-6 bg-blue-600 hover:bg-blue-700"
+              >
+                Request New Reset Link
+              </Button>
               <Button
                 onClick={() => navigate("/login")}
-                className="mt-6 bg-blue-600 hover:bg-blue-700"
+                className="mt-2 ml-2 bg-gray-200 text-gray-800 hover:bg-gray-300"
               >
                 Return to Login
               </Button>
