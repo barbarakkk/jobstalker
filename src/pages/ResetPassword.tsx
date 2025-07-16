@@ -1,11 +1,9 @@
-
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { ArrowLeft, Eye, EyeOff } from "lucide-react";
-import { useAuth } from "@/context/auth";
 import { useToast } from "@/hooks/use-toast";
 import { supabase } from "@/integrations/supabase/client";
 
@@ -13,10 +11,35 @@ const ResetPassword = () => {
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
-  const [isLoading, setIsLoading] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
+  const [sessionRestored, setSessionRestored] = useState(false);
+  const [error, setError] = useState<string | null>(null);
   const { toast } = useToast();
   const navigate = useNavigate();
-  const { session } = useAuth();
+
+  // Handle Supabase password reset hash fragment
+  useEffect(() => {
+    const handleSessionFromHash = async () => {
+      // Only run if there is a hash fragment
+      if (window.location.hash) {
+        setIsLoading(true);
+        // For Supabase v2, use exchangeCodeForSession
+        const { error } = await supabase.auth.exchangeCodeForSession(window.location.hash.substring(1));
+        if (error) {
+          setError("Invalid or expired password reset link.");
+          setIsLoading(false);
+          return;
+        }
+        setSessionRestored(true);
+        setIsLoading(false);
+      } else {
+        // If no hash, assume session is already restored (e.g., user navigated here directly)
+        setSessionRestored(true);
+        setIsLoading(false);
+      }
+    };
+    handleSessionFromHash();
+  }, []);
 
   const togglePasswordVisibility = () => {
     setShowPassword(!showPassword);
@@ -24,7 +47,6 @@ const ResetPassword = () => {
 
   const handleResetPassword = async (e: React.FormEvent) => {
     e.preventDefault();
-    
     if (password !== confirmPassword) {
       toast({
         title: "Passwords don't match",
@@ -33,12 +55,9 @@ const ResetPassword = () => {
       });
       return;
     }
-    
     setIsLoading(true);
-    
     try {
       const { error } = await supabase.auth.updateUser({ password });
-      
       if (error) {
         toast({
           title: "Error",
@@ -50,7 +69,7 @@ const ResetPassword = () => {
           title: "Success",
           description: "Your password has been updated successfully.",
         });
-        navigate("/dashboard");
+        navigate("/login");
       }
     } catch (error: any) {
       toast({
@@ -63,8 +82,18 @@ const ResetPassword = () => {
     }
   };
 
-  // If no session, the user might have clicked an expired link
-  if (!session) {
+  if (isLoading) {
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-gray-50">
+        <div className="text-center">
+          <div className="inline-block h-8 w-8 animate-spin rounded-full border-4 border-solid border-blue-600 border-r-transparent"></div>
+          <p className="mt-2 text-gray-600">Loading...</p>
+        </div>
+      </div>
+    );
+  }
+
+  if (error) {
     return (
       <div className="min-h-screen bg-gray-50 flex flex-col">
         <div className="py-4 px-6 md:px-10 bg-white border-b border-gray-100">
@@ -75,7 +104,6 @@ const ResetPassword = () => {
             </Link>
           </div>
         </div>
-
         <div className="flex flex-1 items-center justify-center p-6">
           <div className="w-full max-w-md">
             <div className="text-center">
@@ -94,6 +122,11 @@ const ResetPassword = () => {
     );
   }
 
+  if (!sessionRestored) {
+    // Should not happen, but just in case
+    return null;
+  }
+
   return (
     <div className="min-h-screen bg-gray-50 flex flex-col">
       <div className="py-4 px-6 md:px-10 bg-white border-b border-gray-100">
@@ -104,14 +137,12 @@ const ResetPassword = () => {
           </Link>
         </div>
       </div>
-
       <div className="flex flex-1 items-center justify-center p-6">
         <div className="w-full max-w-md">
           <div className="mb-8">
             <h1 className="text-2xl font-bold">Reset Your Password</h1>
             <p className="mt-2 text-gray-600">Please enter a new password for your account.</p>
           </div>
-
           <form onSubmit={handleResetPassword} className="space-y-4">
             <div className="space-y-2">
               <Label htmlFor="password">New Password</Label>
@@ -140,7 +171,6 @@ const ResetPassword = () => {
                 </button>
               </div>
             </div>
-
             <div className="space-y-2">
               <Label htmlFor="confirmPassword">Confirm Password</Label>
               <div className="relative">
@@ -155,7 +185,6 @@ const ResetPassword = () => {
                 />
               </div>
             </div>
-
             <Button
               type="submit"
               className="w-full bg-blue-600 hover:bg-blue-700"
@@ -171,7 +200,6 @@ const ResetPassword = () => {
               )}
             </Button>
           </form>
-
           <div className="mt-6 text-center">
             <Link to="/login" className="text-blue-600 hover:underline flex items-center justify-center">
               <ArrowLeft className="h-4 w-4 mr-1" />
