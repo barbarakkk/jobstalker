@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { Plus, FileText, Briefcase, Calendar, Edit, Trash2 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
@@ -26,6 +25,8 @@ const NotesPage: React.FC = () => {
     content: '',
     job_id: ''
   });
+  const [editingNotes, setEditingNotes] = useState<{ [jobId: string]: string }>({});
+  const [saving, setSaving] = useState<string | null>(null);
 
   console.log('NotesPage render - user:', user);
   console.log('NotesPage render - notes:', notes);
@@ -77,6 +78,23 @@ const NotesPage: React.FC = () => {
     });
   };
 
+  const getNoteForJob = (jobId: string) => notes.find((n) => n.job_id === jobId);
+
+  const handleNoteChange = (jobId: string, value: string) => {
+    setEditingNotes((prev) => ({ ...prev, [jobId]: value }));
+  };
+
+  const handleSaveNote = async (jobId: string) => {
+    setSaving(jobId);
+    const existingNote = getNoteForJob(jobId);
+    if (existingNote) {
+      await updateNote({ ...existingNote, content: editingNotes[jobId] });
+    } else {
+      await addNote({ job_id: jobId, title: jobs.find(j => j.id === jobId)?.title || '', content: editingNotes[jobId] });
+    }
+    setSaving(null);
+  };
+
   // Show authentication required if no user
   if (!user) {
     return (
@@ -116,7 +134,7 @@ const NotesPage: React.FC = () => {
         {/* Header */}
         <div className="flex items-center justify-between">
           <div>
-            <h1 className="text-3xl font-bold text-gray-900 mb-2">My Notes</h1>
+            <h1 className="text-3xl font-bold text-gray-900 mb-2">Job Notes</h1>
             <p className="text-gray-600">Keep track of your thoughts and job-related notes</p>
             <p className="text-sm text-gray-400 mt-1">Found {notes.length} notes</p>
           </div>
@@ -333,6 +351,52 @@ const NotesPage: React.FC = () => {
             )}
           </DialogContent>
         </Dialog>
+
+        <div style={{ padding: 32 }}>
+          <h1 style={{ fontSize: 32, marginBottom: 24 }}>Job Notes</h1>
+          <table style={{ width: '100%', borderCollapse: 'collapse' }}>
+            <thead>
+              <tr style={{ background: '#f3f4f6' }}>
+                <th style={{ padding: 12, border: '1px solid #e5e7eb' }}>Title</th>
+                <th style={{ padding: 12, border: '1px solid #e5e7eb' }}>Company</th>
+                <th style={{ padding: 12, border: '1px solid #e5e7eb' }}>Date Saved</th>
+                <th style={{ padding: 12, border: '1px solid #e5e7eb' }}>Stars</th>
+                <th style={{ padding: 12, border: '1px solid #e5e7eb' }}>Notes</th>
+                <th style={{ padding: 12, border: '1px solid #e5e7eb' }}>Action</th>
+              </tr>
+            </thead>
+            <tbody>
+              {jobs.map((job) => {
+                const note = getNoteForJob(job.id);
+                return (
+                  <tr key={job.id} style={{ borderBottom: '1px solid #e5e7eb' }}>
+                    <td style={{ padding: 12 }}>{job.title}</td>
+                    <td style={{ padding: 12 }}>{job.company}</td>
+                    <td style={{ padding: 12 }}>{job.dateSaved}</td>
+                    <td style={{ padding: 12 }}>{'★'.repeat(job.excitement || 0)}</td>
+                    <td style={{ padding: 12 }}>
+                      <textarea
+                        style={{ width: 220, minHeight: 60, fontSize: 15 }}
+                        value={editingNotes[job.id] ?? note?.content ?? ''}
+                        onChange={e => handleNoteChange(job.id, e.target.value)}
+                        placeholder="Add your notes here..."
+                      />
+                    </td>
+                    <td style={{ padding: 12 }}>
+                      <button
+                        onClick={() => handleSaveNote(job.id)}
+                        disabled={saving === job.id}
+                        style={{ padding: '6px 16px', fontSize: 15 }}
+                      >
+                        {saving === job.id ? 'Saving...' : note ? 'Update' : 'Save'}
+                      </button>
+                    </td>
+                  </tr>
+                );
+              })}
+            </tbody>
+          </table>
+        </div>
       </main>
     </div>
   );
