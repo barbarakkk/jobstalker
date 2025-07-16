@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import { Toaster } from '@/components/ui/toaster';
@@ -15,6 +14,7 @@ import Login from '@/pages/Login';
 import SignUp from '@/pages/SignUp';
 import AuthCallback from '@/pages/AuthCallback';
 import Index from '@/pages/Index';
+import ForgotPassword from '@/pages/ForgotPassword';
 
 function ProtectedRoute({ children }: { children: React.ReactNode }) {
   const { user, isLoading } = useAuth();
@@ -98,6 +98,7 @@ function App() {
                     </ProtectedRoute>
                   } 
                 />
+                <Route path="/forgot-password" element={<ForgotPassword />} />
               </Routes>
             </div>
             <Toaster />
